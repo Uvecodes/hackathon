@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-require-auth>
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Mother Suite — My Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/shared.css">
-  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/wellness.css">
 </head>
 <body>
 
@@ -21,32 +22,25 @@
   </div>
 
   <!-- ── NAV (minimal — user is logged in) ── -->
-  <nav>
+  <nav id="main-nav">
     <a href="dashboard.html" class="nav-logo">The Mother Suite</a>
-    <ul class="nav-links">
-      <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="tracker.html">Baby Tracker</a></li>
-      <li><a href="community.html">Community</a></li>
-    </ul>
-    <!-- User avatar + logout in nav on desktop -->
+    <!-- User info + logout (right side) -->
     <div style="display:flex;align-items:center;gap:1rem;">
-      <div style="font-size:0.82rem;color:var(--text-soft);font-family:var(--font-sub);">Hi, <strong style="color:var(--text-dark);">Jane</strong> 👋</div>
-      <button id="logoutBtn" style="
-        background:none;border:1.5px solid rgba(180,120,90,0.25);
-        border-radius:var(--radius-pill);padding:0.45rem 1rem;
-        font-family:var(--font-sub);font-size:0.78rem;font-weight:600;
-        color:var(--text-mid);transition:all 0.2s;
-      ">Log out</button>
+      <div id="navGreeting" style="font-size:0.82rem;color:var(--text-soft);font-family:var(--font-sub);">Hi, <strong style="color:var(--text-dark);">there</strong> 👋</div>
+      <button id="navLogoutBtn" class="dash-nav-logout">Log out</button>
     </div>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
+  <!-- Mobile menu — mirrors sidebar nav links -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="dashboard.html">Dashboard</a>
     <a href="tracker.html">Baby Tracker</a>
     <a href="community.html">Community</a>
+    <a href="wellness.html">Wellness</a>
+    <a href="cry-detection.html">Cry Detector</a>
   </div>
 
   <!-- ── DASHBOARD LAYOUT ── -->
@@ -63,25 +57,31 @@
       </div>
 
       <!-- Sidebar navigation links -->
-      <nav class="sidebar-nav">
+      <div class="sidebar-nav">
         <a href="dashboard.html" class="sidebar-link active">
           <span class="sl-icon">🏠</span> Dashboard
         </a>
         <a href="tracker.html" class="sidebar-link">
           <span class="sl-icon">👶</span> Baby Tracker
         </a>
+        <a href="wellness.html" class="sidebar-link">
+          <span class="sl-icon">🌿</span> Wellness
+        </a>
         <a href="community.html" class="sidebar-link">
           <span class="sl-icon">💬</span> Community
         </a>
-      </nav>
+        <a href="cry-detection.html" class="sidebar-link">
+          <span class="sl-icon">🔊</span> Cry Detector
+        </a>
+      </div>
 
       <!-- Bottom user block -->
       <div class="sidebar-bottom">
         <div class="sidebar-user">
-          <div class="sidebar-avatar">👩</div>
+          <div class="sidebar-avatar" id="sidebarAvatar">👩</div>
           <div>
-            <div class="sidebar-user-name">Jane Smith</div>
-            <div class="sidebar-user-email">jane@example.com</div>
+            <div class="sidebar-user-name" id="sidebarUserName">—</div>
+            <div class="sidebar-user-email" id="sidebarEmail"></div>
           </div>
         </div>
         <button class="sidebar-logout" id="logoutBtn">
@@ -109,6 +109,44 @@
           <span class="standin-pill">✦ Product Standin — In Development</span>
         </div>
         <!-- The ::before pseudo-element handles the decorative emoji (no extra div needed) -->
+      </div>
+
+      <!-- ── WELLNESS SCORE WIDGET ── -->
+      <div class="wellness-score-card">
+        <!-- SVG ring -->
+        <div class="ws-ring-wrap">
+          <svg class="ws-ring" viewBox="0 0 100 100" width="100" height="100" style="transform:rotate(-90deg);">
+            <defs>
+              <linearGradient id="wsGradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#C47B5A"/>
+                <stop offset="100%" stop-color="#E8A690"/>
+              </linearGradient>
+            </defs>
+            <circle class="ws-ring-bg" cx="50" cy="50" r="40"/>
+            <circle class="ws-ring-fg" id="wsRingFg" cx="50" cy="50" r="40"/>
+          </svg>
+          <div class="ws-ring-text">
+            <span class="ws-score-num" id="wsScoreNum">—</span>
+            <span class="ws-score-pct">%</span>
+          </div>
+        </div>
+        <!-- Info -->
+        <div class="ws-info">
+          <h3>Your <em>Wellness</em> Score</h3>
+          <p>Based on your daily check-ins — mood, sleep, nutrition, and symptoms tracked over time.</p>
+          <div class="ws-checkins">
+            <div class="ws-stat">
+              <div class="ws-stat-num" id="wsTotalCheckins">—</div>
+              <div class="ws-stat-label">Check-ins</div>
+            </div>
+            <div class="ws-stat">
+              <div class="ws-stat-num" id="wsDaysTracked">—</div>
+              <div class="ws-stat-label">Days tracked</div>
+            </div>
+          </div>
+        </div>
+        <!-- CTA -->
+        <a href="wellness.html" class="standin-pill" style="text-decoration:none;margin-left:auto;align-self:center;">📝 New Check-in →</a>
       </div>
 
       <!-- ── STAT CARDS — each card is a self-contained unit ── -->
@@ -150,6 +188,19 @@
 
       <!-- ── CONTENT GRID — two-column layout ── -->
       <div class="dash-grid">
+
+        <!-- Card: Recent Check-ins (live data) — full width -->
+        <div class="dash-card full-width">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Recent Check-ins</div>
+            <a href="wellness.html" class="dash-card-action">+ New →</a>
+          </div>
+          <div class="checkins-list" id="recentCheckins">
+            <div class="placeholder-row" style="justify-content:center;color:var(--text-soft);font-size:0.82rem;font-family:var(--font-sub);">
+              Loading…
+            </div>
+          </div>
+        </div>
 
         <!-- Card: Activity feed — TEXT only, no image -->
         <div class="dash-card">
@@ -219,6 +270,8 @@
             <span class="pc-label">Sat</span>
             <span class="pc-label">Sun</span>
           </div>
+
+          
         </div>
 
         <!-- Card: Milestones — TEXT only -->
@@ -300,7 +353,12 @@
     @keyframes swAnim { to { transform: scaleY(0.2); } }
   </style>
 
-  <script src="js/shared.js"></script>
-  <script src="js/dashboard.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/shared.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/dashboard.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
 </body>
 </html>

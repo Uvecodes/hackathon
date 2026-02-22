@@ -2,6 +2,17 @@
    THE MOTHER SUITE — SHARED JS
    ============================================ */
 
+// ── PRELOADER ──────────────────────────────────────────────────────────────────
+// Fade out the splash screen once the page has fully loaded.
+window.addEventListener('load', () => {
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    preloader.classList.add('hidden');
+    // Remove from DOM after transition completes so it doesn't block interaction
+    preloader.addEventListener('transitionend', () => preloader.remove(), { once: true });
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // ── CUSTOM CURSOR (desktop / fine pointer only) ──
@@ -9,12 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const ring   = document.getElementById('cursor-ring');
 
   if (cursor && ring && window.matchMedia('(pointer: fine)').matches) {
-    // Initialize cursor position
     cursor.style.left = '0px';
-    cursor.style.top = '0px';
-    ring.style.left = '0px';
-    ring.style.top = '0px';
-    
+    cursor.style.top  = '0px';
+    ring.style.left   = '0px';
+    ring.style.top    = '0px';
+
     document.addEventListener('mousemove', e => {
       cursor.style.left = e.clientX + 'px';
       cursor.style.top  = e.clientY + 'px';
@@ -38,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── NAV SCROLL SHADOW ──
-  const nav = document.querySelector('nav');
+  const nav = document.getElementById('main-nav');
   if (nav) {
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 20);
@@ -91,5 +101,26 @@ document.addEventListener('DOMContentLoaded', () => {
       a.classList.add('active');
     }
   });
+
+  // ── MOBILE PWA BUTTON SYNC ──
+  // Mirror the desktop PWA install button's visibility to the mobile menu button.
+  const desktopInstall = document.getElementById('pwa-install-btn');
+  const mobileInstall  = document.getElementById('pwa-install-btn-mobile');
+
+  if (desktopInstall && mobileInstall) {
+    // Sync initial state
+    mobileInstall.hidden = desktopInstall.hidden;
+
+    // Watch for hidden attribute changes on the desktop button
+    const observer = new MutationObserver(() => {
+      mobileInstall.hidden = desktopInstall.hidden;
+    });
+    observer.observe(desktopInstall, { attributes: true, attributeFilter: ['hidden'] });
+
+    // Trigger install prompt from the mobile button too
+    mobileInstall.addEventListener('click', () => {
+      if (window.PWA) window.PWA.promptInstall();
+    });
+  }
 
 });

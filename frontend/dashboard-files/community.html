@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-require-auth>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Mother Suite — Community</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/community.css">
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <div class="blob-bg">
+    <div class="blob blob-1" style="opacity:0.10;"></div>
+    <div class="blob blob-2" style="opacity:0.08;"></div>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="dashboard.html" class="nav-logo">The Mother Suite</a>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <div id="navGreeting" style="font-size:0.82rem;color:var(--text-soft);font-family:var(--font-sub);">Hi, <strong style="color:var(--text-dark);">there</strong> 👋</div>
+      <button id="navLogoutBtn" class="dash-nav-logout">Log out</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="tracker.html">Baby Tracker</a>
+    <a href="community.html">Community</a>
+    <a href="wellness.html">Wellness</a>
+    <a href="safety.html">Safety</a>
+    <a href="cry-detection.html">Cry Detector</a>
+  </div>
+
+  <!-- ── DASHBOARD LAYOUT ── -->
+  <div class="dashboard-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-greeting">
+        <div class="greet-label">Logged in as</div>
+        <div class="greet-name" id="sidebarName">—</div>
+        <div class="greet-sub" id="sidebarSub">mama 🌿</div>
+      </div>
+
+      <div class="sidebar-nav">
+        <a href="dashboard.html" class="sidebar-link">
+          <span class="sl-icon">🏠</span> Dashboard
+        </a>
+        <a href="tracker.html" class="sidebar-link">
+          <span class="sl-icon">👶</span> Baby Tracker
+        </a>
+        <a href="wellness.html" class="sidebar-link">
+          <span class="sl-icon">🌿</span> Wellness
+        </a>
+        <a href="community.html" class="sidebar-link active">
+          <span class="sl-icon">💬</span> Community
+        </a>
+        <a href="safety.html" class="sidebar-link">
+          <span class="sl-icon">🛡️</span> Safety
+        </a>
+        <a href="cry-detection.html" class="sidebar-link">
+          <span class="sl-icon">🔊</span> Cry Detector
+        </a>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" id="sidebarAvatar">👩</div>
+          <div>
+            <div class="sidebar-user-name" id="sidebarUserName">—</div>
+            <div class="sidebar-user-email" id="sidebarEmail"></div>
+          </div>
+        </div>
+        <button class="sidebar-logout" id="logoutBtn">Log out</button>
+      </div>
+
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="dash-main">
+
+      <!-- Page header -->
+      <div class="dash-topbar comm-topbar">
+        <div>
+          <h1>You're not doing<br>this <em>alone.</em></h1>
+          <p class="comm-topbar-sub">Share experiences, ask questions, and cheer each other on — built for mamas who get it.</p>
+        </div>
+        <div class="dash-topbar-date" id="dashDate"></div>
+      </div>
+
+      <!-- ── CREATE POST ── -->
+      <div class="create-post-box">
+        <div class="create-post-top">
+          <div class="create-post-avatar" id="myAvatar">👩</div>
+          <textarea
+            id="postInput"
+            placeholder="Share something with the community… (Shift+Enter to post)"
+            maxlength="2000"
+          ></textarea>
+        </div>
+        <div class="create-post-footer">
+          <span class="create-post-hint">Shift+Enter to post</span>
+          <button id="submitPostBtn">🌸 Post</button>
+        </div>
+      </div>
+
+      <!-- ── POSTS FEED ── -->
+      <div id="postsFeed"></div>
+
+    </main>
+  </div><!-- /.dashboard-page -->
+
+  <!-- ── SCRIPTS ── -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/shared.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/community.js"></script>
+  <script src="../js/chatbot-widget.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "name": "The Mother Suite",
+  "short_name": "MotherSuite",
+  "description": "Your pregnancy & baby companion — prenatal care, postpartum recovery, and baby's first year.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fdf8f3",
+  "theme_color": "#d4876e",
+  "categories": ["health", "medical", "lifestyle"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sign Up",
+      "short_name": "Sign Up",
+      "description": "Create your free account",
+      "url": "./signup.html"
+    },
+    {
+      "name": "Log In",
+      "short_name": "Log In",
+      "description": "Sign in to your account",
+      "url": "./login.html"
+    }
+  ]
+}

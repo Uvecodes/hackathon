@@ -3,16 +3,33 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>The Mother Suite — Your Pregnancy & Baby Companion</title>
+  <title>The Mother Suite — Your Pregnancy &amp; Baby Companion</title>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/shared.css">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d4876e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="The Mother Suite">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <!-- SEO -->
+  <meta name="description" content="The Mother Suite supports working women through every stage — prenatal care, postpartum recovery, and your baby's first year.">
 </head>
 <body>
 
+  <!-- Custom cursor -->
   <div id="cursor"></div>
   <div id="cursor-ring"></div>
 
+  <!-- Animated blob backgrounds -->
   <div class="blob-bg">
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
@@ -20,31 +37,71 @@
     <div class="blob blob-4" style="width:250px;height:250px;background:var(--sky);top:20%;left:20%;animation-delay:-3s;"></div>
   </div>
 
+  <!-- ── PRELOADER ────────────────────────────────────────────────────────── -->
+  <!-- Displays bloom's logo (🌸 The Mother Suite) while the page loads.
+       Fades out automatically when window.load fires (see js/shared.js). -->
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <span class="preloader-icon">🌸</span>
+      <span class="preloader-logo">The Mother Suite</span>
+    </div>
+  </div>
+
+  <!-- ── PWA UPDATE BANNER ─────────────────────────────────────────────────── -->
+  <div id="pwa-update-banner" class="pwa-update-banner" hidden role="status">
+    <span>A new version is available.</span>
+    <button id="pwa-update-btn" class="pwa-update-btn">Update</button>
+    <button id="pwa-dismiss-btn" class="pwa-dismiss-btn" aria-label="Dismiss">✕</button>
+  </div>
+
   <!-- ── NAV ── -->
   <nav id="main-nav">
     <a href="index.html" class="nav-logo">The Mother Suite</a>
     <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="login.html">Log In</a></li>
+      <li><a href="signup.html">Sign Up</a></li>
       <li><a href="signup.html" class="nav-cta">Try It Free</a></li>
+      <li>
+        <button type="button" id="pwa-install-btn" class="nav-pwa-btn" hidden aria-label="Install app">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Install
+        </button>
+      </li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
   </nav>
 
+  <!-- Mobile full-screen menu -->
   <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
     <a href="#about">About</a>
     <a href="login.html">Log In</a>
+    <a href="signup.html">Sign Up</a>
     <a href="signup.html" class="mobile-cta">Try It Free</a>
+    <button type="button" id="pwa-install-btn-mobile" class="mobile-pwa-btn" hidden aria-label="Install app">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Install App
+    </button>
   </div>
 
   <!-- ── HERO ── -->
   <section class="hero">
 
-    <!-- TEXT (isolated) -->
+    <!-- TEXT -->
     <div class="hero-text">
-      <div class="hero-badge">Your pregnancy & baby companion</div>
+      <div class="hero-badge">Your pregnancy &amp; baby companion</div>
       <h1 class="hero-title">
         Every <em>mama</em> deserves a <span class="sage-word">steady</span> hand.
       </h1>
@@ -58,7 +115,7 @@
       <p class="hero-note">Free to get started · No credit card required</p>
     </div>
 
-    <!-- IMAGE (isolated) -->
+    <!-- VISUAL -->
     <div class="hero-visual">
       <div class="hero-card-stack">
 
@@ -162,7 +219,6 @@
 
       <div class="journey-cards">
 
-        <!-- Card 1 — TEXT isolated inside card -->
         <div class="j-card j-card-wellness reveal">
           <div class="j-card-num">01</div>
           <span class="j-icon">🤰</span>
@@ -176,11 +232,10 @@
           </div>
         </div>
 
-        <!-- Card 2 -->
         <div class="j-card j-card-postnatal reveal">
           <div class="j-card-num">02</div>
           <span class="j-icon">🌿</span>
-          <div class="j-title">Postnatal & Postpartum</div>
+          <div class="j-title">Postnatal &amp; Postpartum</div>
           <p class="j-desc">Recovery isn't linear. The Mother Suite helps you monitor your mental health, physical healing, and navigate returning to work after maternity leave.</p>
           <div class="j-tags">
             <span class="j-tag">Mood Journal</span>
@@ -190,7 +245,6 @@
           </div>
         </div>
 
-        <!-- Card 3 -->
         <div class="j-card j-card-baby reveal">
           <div class="j-card-num">03</div>
           <span class="j-icon">👶</span>
@@ -213,7 +267,7 @@
     <div class="features-inner">
       <div class="features-layout">
 
-        <!-- IMAGE (isolated) -->
+        <!-- VISUAL -->
         <div class="features-visual reveal">
           <div class="feat-img-box">
             <div class="feat-img-inner">
@@ -231,7 +285,7 @@
           </div>
         </div>
 
-        <!-- TEXT (isolated) -->
+        <!-- TEXT -->
         <div class="reveal">
           <div class="section-tag">Features</div>
           <h2 class="section-title">Everything in one <em>gentle</em> place.</h2>
@@ -247,7 +301,7 @@
             <div class="feat-item">
               <div class="feat-icon-wrap feat-icon-sage">🏃‍♀️</div>
               <div class="feat-text">
-                <div class="feat-title">Fitness & Recovery</div>
+                <div class="feat-title">Fitness &amp; Recovery</div>
                 <p class="feat-desc">Safe prenatal workouts and postpartum rehab exercises, adapted to where you are in your journey.</p>
               </div>
             </div>
@@ -277,7 +331,7 @@
   <section class="cry-section">
     <div class="cry-inner">
 
-      <!-- TEXT (isolated) -->
+      <!-- TEXT -->
       <div class="cry-text reveal">
         <div class="section-tag">Smart Listening</div>
         <h2 class="section-title">Know why baby's <em>crying</em> before you're in the room.</h2>
@@ -306,7 +360,7 @@
         </div>
       </div>
 
-      <!-- IMAGE (isolated) -->
+      <!-- VISUAL -->
       <div class="cry-visual reveal">
         <div class="cry-icon">👶</div>
         <div class="sound-wave">
@@ -328,19 +382,16 @@
     <div class="community-inner">
 
       <div class="community-header">
-        <!-- TEXT (isolated) -->
         <div class="reveal">
           <div class="section-tag">Community</div>
           <h2 class="section-title">Real mamas, real <em>answers.</em></h2>
           <p class="section-desc">Share experiences, troubleshoot tough nights, and cheer each other on — built for mothers in the tech world and beyond.</p>
         </div>
-        <!-- CTA (isolated) -->
         <div class="reveal" style="text-align:right;">
           <a href="community.html" class="btn-primary">Join the Community →</a>
         </div>
       </div>
 
-      <!-- POSTS — image and text isolated within each card -->
       <div class="community-posts">
         <div class="post-card reveal">
           <div class="post-img bg-blush"><span>🌙</span>Community post image</div>
@@ -380,7 +431,7 @@
           <span class="page-tile-emoji">📈</span>
           <div>
             <div class="page-tile-title">Baby Tracker</div>
-            <div class="page-tile-sub">Sleep, feeds & milestones</div>
+            <div class="page-tile-sub">Sleep, feeds &amp; milestones</div>
           </div>
           <span class="page-tile-arrow">↗</span>
         </a>
@@ -388,7 +439,7 @@
           <span class="page-tile-emoji">💬</span>
           <div>
             <div class="page-tile-title">Community</div>
-            <div class="page-tile-sub">Share & troubleshoot</div>
+            <div class="page-tile-sub">Share &amp; troubleshoot</div>
           </div>
           <span class="page-tile-arrow">↗</span>
         </a>
@@ -396,7 +447,7 @@
           <span class="page-tile-emoji">💛</span>
           <div>
             <div class="page-tile-title">About Us</div>
-            <div class="page-tile-sub">Our story & mission</div>
+            <div class="page-tile-sub">Our story &amp; mission</div>
           </div>
           <span class="page-tile-arrow">↗</span>
         </a>
@@ -416,7 +467,7 @@
   <section class="about-section" id="about">
     <div class="about-inner">
 
-      <!-- TEXT (isolated) -->
+      <!-- TEXT -->
       <div class="about-text reveal">
         <div class="section-tag">About Us</div>
         <h2 class="section-title">Built by women,<br>for <em>women.</em></h2>
@@ -448,7 +499,7 @@
         </div>
       </div>
 
-      <!-- VISUAL (isolated) -->
+      <!-- VISUAL -->
       <div class="about-visual reveal">
         <div class="about-card-main">
           <div class="acm-icon">🌸</div>
@@ -502,10 +553,22 @@
       <li><a href="community.html">Community</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="login.html">Log In</a></li>
+      <li><a href="signup.html">Sign Up</a></li>
     </ul>
-    <p class="footer-copy">© 2025 The Mother Suite. Made with 💛 for every mama.</p>
+    <p class="footer-copy">© <span id="footer-year"></span> The Mother Suite. Made with 💛 for every mama.</p>
   </footer>
 
+  <!-- Scripts -->
+  <!-- shared.js: bloom's cursor, nav, scroll-reveal + preloader fade + mobile PWA sync -->
   <script src="js/shared.js"></script>
+  <!-- pwa.js: install prompt, SW registration, update banner -->
+  <script src="js/pwa.js"></script>
+
+  <script>
+    // Auto-update footer year
+    const yr = document.getElementById('footer-year');
+    if (yr) yr.textContent = new Date().getFullYear();
+  </script>
+
 </body>
 </html>

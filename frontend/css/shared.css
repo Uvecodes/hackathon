@@ -39,6 +39,62 @@ body {
   overflow-x: hidden;
 }
 
+/* ── PRELOADER ── */
+.preloader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.preloader-inner {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0.6rem;
+}
+.preloader-icon {
+  font-size: 2.8rem;
+  animation: preloaderPulse 1.8s ease-in-out infinite;
+  display: block;
+}
+.preloader-logo {
+  font-family: var(--font-display);
+  font-size: 2.2rem; font-weight: 400; font-style: italic;
+  color: var(--blush-deep); letter-spacing: 0.01em;
+}
+@keyframes preloaderPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.08); opacity: 0.75; }
+}
+
+/* ── PWA UPDATE BANNER ── */
+.pwa-update-banner {
+  position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+  z-index: 8000; background: var(--text-dark); color: var(--cream);
+  border-radius: var(--radius-pill); padding: 0.75rem 1.4rem;
+  display: flex; align-items: center; gap: 1rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  font-family: var(--font-sub); font-size: 0.85rem;
+  white-space: nowrap;
+}
+.pwa-update-btn {
+  background: var(--blush-deep); color: var(--white);
+  border: none; border-radius: var(--radius-pill);
+  padding: 0.35rem 1rem; font-family: var(--font-sub);
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  transition: background 0.2s;
+}
+.pwa-update-btn:hover { background: #c7785f; }
+.pwa-dismiss-btn {
+  background: none; border: none; color: rgba(253,248,243,0.6);
+  font-size: 1rem; cursor: pointer; padding: 0 0.2rem;
+  transition: color 0.2s; line-height: 1;
+}
+.pwa-dismiss-btn:hover { color: var(--cream); }
+
 /* ── CUSTOM CURSOR (desktop only) ── */
 @media (pointer: fine) {
   * { cursor: none !important; }
@@ -83,22 +139,23 @@ body {
 }
 
 /* ── NAV ── */
-nav {
+#main-nav {
   position: fixed; top:0;left:0;right:0; z-index: 500;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 1.1rem 3rem;
+  min-height: 72px;
+  padding: 0 3rem;
   background: rgba(253,248,243,0.88);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(232,166,144,0.18);
 }
-nav.scrolled { box-shadow: 0 4px 24px rgba(180,110,80,0.08); }
+#main-nav.scrolled { box-shadow: 0 4px 24px rgba(180,110,80,0.08); }
 
 .nav-logo {
   font-family: var(--font-display);
   font-size: 1.5rem; font-weight: 400; font-style: italic;
   color: var(--blush-deep); text-decoration: none; white-space: nowrap;
 }
-.nav-links { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+.nav-links { display: flex; gap: 1.6rem; list-style: none; align-items: center; }
 .nav-links a {
   font-family: var(--font-sub); font-size: 0.85rem; font-weight: 500;
   color: var(--text-mid); text-decoration: none;
@@ -115,6 +172,23 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(180,110,80,0.08); }
   box-shadow: 0 4px 14px rgba(212,135,110,0.28);
 }
 .nav-cta:hover { background: #c7785f !important; transform: translateY(-1px) !important; }
+
+/* PWA Install button (nav) */
+.nav-pwa-btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: transparent; color: var(--text-mid);
+  padding: 0.45rem 0.9rem; border-radius: var(--radius-pill);
+  border: 1.5px solid rgba(180,120,90,0.25);
+  font-family: var(--font-sub); font-size: 0.78rem; font-weight: 500;
+  cursor: pointer; transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.nav-pwa-btn:hover {
+  border-color: var(--blush-mid);
+  color: var(--blush-deep);
+  transform: translateY(-1px);
+}
+.nav-pwa-btn svg { flex-shrink: 0; }
 
 /* Hamburger */
 .nav-toggle {
@@ -149,6 +223,16 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(180,110,80,0.08); }
   padding: .8rem 2rem; border-radius: var(--radius-pill);
   font-family: var(--font-body); font-size: 1rem; font-weight: 600;
 }
+/* Mobile PWA button */
+.mobile-pwa-btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: transparent; color: var(--text-mid);
+  padding: 0.6rem 1.4rem; border-radius: var(--radius-pill);
+  border: 1.5px solid rgba(180,120,90,0.3);
+  font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+  cursor: pointer; transition: border-color 0.2s, color 0.2s;
+}
+.mobile-pwa-btn:hover { border-color: var(--blush-mid); color: var(--blush-deep); }
 
 /* ── BUTTONS ── */
 .btn-primary {
@@ -337,9 +421,9 @@ footer {
 @keyframes barGrow { to { transform: scaleY(1); } }
 
 /* Floating context cards */
-.fc-cry  { position: absolute; top: 8%;    right: -30px; animation-delay: 0s; }
-.fc-feed { position: absolute; bottom: 22%;left: -45px;  animation-delay: -2s; }
-.fc-week { position: absolute; top: 45%;   right: -55px; animation-delay: -1s; }
+.fc-cry  { position: absolute; top: 8%;    right: -30px; animation-delay: 0s; z-index: 10; opacity: 0.7; }
+.fc-feed { position: absolute; bottom: 22%;left: -45px;  animation-delay: -2s; z-index: 9; opacity: 0.7; }
+.fc-week { position: absolute; top: 45%;   right: -55px; animation-delay: -1s; z-index: 8; opacity: 0.7; }
 .fc-icon { font-size: 1.5rem; }
 .fc-title { font-size: 0.72rem; font-weight: 700; color: var(--text-dark); }
 .fc-sub   { font-size: 0.62rem; color: var(--text-soft); }

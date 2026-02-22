@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en" data-require-auth>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Mother Suite — Safety</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/safety.css">
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <div class="blob-bg">
+    <div class="blob blob-1" style="opacity:0.10;"></div>
+    <div class="blob blob-2" style="opacity:0.08;"></div>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="dashboard.html" class="nav-logo">The Mother Suite</a>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <div id="navGreeting" style="font-size:0.82rem;color:var(--text-soft);font-family:var(--font-sub);">Hi, <strong style="color:var(--text-dark);">there</strong> 👋</div>
+      <button id="navLogoutBtn" class="dash-nav-logout">Log out</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="tracker.html">Baby Tracker</a>
+    <a href="community.html">Community</a>
+    <a href="wellness.html">Wellness</a>
+    <a href="safety.html">Safety</a>
+    <a href="cry-detection.html">Cry Detector</a>
+  </div>
+
+  <!-- ── DASHBOARD LAYOUT ── -->
+  <div class="dashboard-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-greeting">
+        <div class="greet-label">Logged in as</div>
+        <div class="greet-name" id="sidebarName">—</div>
+        <div class="greet-sub" id="sidebarSub">mama 🌿</div>
+      </div>
+
+      <div class="sidebar-nav">
+        <a href="dashboard.html" class="sidebar-link">
+          <span class="sl-icon">🏠</span> Dashboard
+        </a>
+        <a href="tracker.html" class="sidebar-link">
+          <span class="sl-icon">👶</span> Baby Tracker
+        </a>
+        <a href="wellness.html" class="sidebar-link">
+          <span class="sl-icon">🌿</span> Wellness
+        </a>
+        <a href="community.html" class="sidebar-link">
+          <span class="sl-icon">💬</span> Community
+        </a>
+        <a href="safety.html" class="sidebar-link active">
+          <span class="sl-icon">🛡️</span> Safety
+        </a>
+        <a href="cry-detection.html" class="sidebar-link">
+          <span class="sl-icon">🔊</span> Cry Detector
+        </a>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" id="sidebarAvatar">👩</div>
+          <div>
+            <div class="sidebar-user-name" id="sidebarUserName">—</div>
+            <div class="sidebar-user-email" id="sidebarEmail"></div>
+          </div>
+        </div>
+        <button class="sidebar-logout" id="logoutBtn">Log out</button>
+      </div>
+
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="dash-main">
+
+      <!-- Page header -->
+      <div class="dash-topbar">
+        <div>
+          <h1>Safety <em>Guardian.</em></h1>
+          <p class="dash-topbar-sub">Emergency features to keep you safe at every moment.</p>
+        </div>
+        <div class="dash-topbar-date" id="dashDate"></div>
+      </div>
+
+      <!-- ── EMERGENCY ALERT SECTION ── -->
+      <section class="safety-section">
+        <div class="section-header">
+          <h2>Emergency Alert</h2>
+          <p class="section-desc">Need help? Notify your emergency contacts instantly.</p>
+        </div>
+
+        <div class="alert-preview">
+          <div class="alert-card">
+            <div class="alert-icon">🆘</div>
+            <h3>Send Emergency Alert</h3>
+            <p>Click the button below to send an emergency alert to your contacts with your current location.</p>
+
+            <button class="btn-emergency" id="shake-alert-btn">
+              <span class="btn-icon">🛡️</span>
+              <span class="btn-text">I Need Help Now</span>
+            </button>
+            <p class="alert-hint">Your emergency contacts will receive your location immediately</p>
+          </div>
+
+          <div class="alert-status">
+            <div class="status-item">
+              <span class="status-label">Contacts Ready</span>
+              <span class="status-value" id="contacts-ready">0/2</span>
+            </div>
+            <div class="status-item">
+              <span class="status-label">Location Access</span>
+              <span class="status-value" id="location-status">Off</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── EMERGENCY CONTACTS SECTION ── -->
+      <section class="safety-section">
+        <div class="section-header">
+          <h2>Emergency Contacts</h2>
+          <p class="section-desc">Add up to 2 trusted people who will receive your alerts.</p>
+        </div>
+
+        <!-- Add Contact Form -->
+        <div class="contact-form-card" id="contact-form-card">
+          <h3>Add Emergency Contact</h3>
+          <form id="add-contact-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="contact-name" class="form-label">Full Name</label>
+                <input type="text" id="contact-name" placeholder="Jane Doe" class="form-input" required/>
+              </div>
+
+              <div class="form-group">
+                <label for="contact-email" class="form-label">Email <span class="required">*</span></label>
+                <input type="email" id="contact-email" placeholder="contact@example.com" class="form-input" required/>
+              </div>
+
+              <div class="form-group">
+                <label for="contact-phone" class="form-label">Phone Number <span class="required">*</span></label>
+                <input type="tel" id="contact-phone" placeholder="+1 (555) 123-4567" class="form-input" required/>
+              </div>
+
+              <div class="form-group">
+                <label for="contact-relation" class="form-label">Relationship</label>
+                <select id="contact-relation" class="s-form-select" required>
+                  <option value="">— Select —</option>
+                  <option value="spouse">Spouse / Partner</option>
+                  <option value="parent">Parent</option>
+                  <option value="sibling">Sibling</option>
+                  <option value="friend">Friend</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="add-contact-btn">Add Contact</button>
+
+            <div class="form-alert error-alert" id="form-error" hidden></div>
+            <div class="form-alert success-alert" id="form-success" hidden></div>
+          </form>
+        </div>
+
+        <p class="form-max-hint" id="form-max-hint" hidden>You have reached the maximum of 2 emergency contacts.</p>
+
+        <!-- Contacts List -->
+        <div id="contacts-list" class="contacts-list">
+          <div class="loading-row">Loading contacts…</div>
+        </div>
+      </section>
+
+      <!-- ── LOCATION SHARING SECTION ── -->
+      <section class="safety-section">
+        <div class="section-header">
+          <h2>Live Location Sharing</h2>
+          <p class="section-desc">Share your real-time location with your emergency contacts.</p>
+        </div>
+
+        <div class="location-card">
+          <div class="location-info">
+            <h3>Location Status</h3>
+
+            <div class="toggle-switch">
+              <input type="checkbox" id="location-toggle" class="toggle-input"/>
+              <label for="location-toggle" class="toggle-label">
+                <span class="toggle-slider"></span>
+                <span class="toggle-text">Location Sharing</span>
+              </label>
+            </div>
+
+            <p class="location-hint">When enabled, your contacts can see your real-time location. You can disable this anytime.</p>
+
+            <div class="info-box">
+              <h4>How it works</h4>
+              <ul>
+                <li>Your location is updated every 30 seconds</li>
+                <li>Contacts can only access it when sharing is enabled</li>
+                <li>Last known location is saved for 7 days</li>
+                <li>You can revoke access anytime</li>
+              </ul>
+            </div>
+
+            <div class="info-box warning">
+              <h4>Privacy &amp; Security</h4>
+              <ul>
+                <li>Location data is encrypted with AES-256</li>
+                <li>Never sold or shared with third parties</li>
+                <li>Full control over who sees your location</li>
+                <li>GDPR compliant</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="location-actions">
+            <button class="btn-secondary" id="test-location-btn">Test Location Access</button>
+            <button class="btn-secondary" id="view-location-btn">View Last Known Location</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SAFETY TIPS ── -->
+      <section class="safety-section">
+        <div class="section-header">
+          <h2>Safety Tips</h2>
+        </div>
+
+        <div class="tips-grid">
+          <div class="tip-card">
+            <span class="tip-emoji">📱</span>
+            <h3>Keep Phone Charged</h3>
+            <p>Ensure your phone has sufficient battery for emergencies.</p>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-emoji">✅</span>
+            <h3>Test Your Alert</h3>
+            <p>Regularly test the emergency alert feature to ensure it works.</p>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-emoji">📍</span>
+            <h3>Enable Location Services</h3>
+            <p>Allow location access for accurate emergency response.</p>
+          </div>
+
+          <div class="tip-card">
+            <span class="tip-emoji">👥</span>
+            <h3>Keep Contacts Updated</h3>
+            <p>Update emergency contact info whenever it changes.</p>
+          </div>
+        </div>
+      </section>
+
+    </main><!-- /.dash-main -->
+  </div><!-- /.dashboard-page -->
+
+  <!-- ── EMERGENCY ALERT MODAL ── -->
+  <div id="alert-modal" class="modal hidden">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="alert-header">
+        <span class="alert-emoji">🆘</span>
+        <h2>Emergency Alert</h2>
+      </div>
+
+      <div class="alert-message">
+        <p>You're about to send an emergency alert to your contacts. This will share your location and contact information.</p>
+      </div>
+
+      <div class="countdown-timer">
+        <span class="countdown-number" id="countdown">10</span>
+        <span class="countdown-text">seconds to cancel</span>
+      </div>
+
+      <div class="modal-buttons">
+        <button class="btn-cancel" id="cancel-alert-btn">Cancel</button>
+        <button class="btn-confirm" id="confirm-alert-btn">Confirm — Send Alert</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCRIPTS ── -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/shared.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+  /* ============================================
+     SAFETY — PAGE LOGIC
+     ============================================ */
+
+  // ── Contacts ready flag ──────────────────────────────────────────────────
+  let alertInProgress = false;
+
+  // ── Load Emergency Contacts ──────────────────────────────────────────────
+  async function loadContacts() {
+    try {
+      const data = await AUTH.get('/api/safety/contacts');
+      const contacts = data.contacts || [];
+
+      const html = contacts.map(c => `
+        <div class="contact-item">
+          <div class="contact-info">
+            <div class="contact-name">${c.name}</div>
+            <div class="contact-relation">${c.relationship}</div>
+            <div class="contact-email">${c.email || ''}</div>
+            <div class="contact-phone">${c.phone}</div>
+          </div>
+          <button class="btn-delete" data-contact-id="${c.id}">✕</button>
+        </div>
+      `).join('');
+
+      const list = document.getElementById('contacts-list');
+      list.innerHTML = html || '<p class="empty-msg">No emergency contacts yet. Add one above.</p>';
+
+      // delete handlers
+      list.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', () => deleteContact(btn.dataset.contactId));
+      });
+
+      // update status badge
+      document.getElementById('contacts-ready').textContent = `${contacts.length}/2`;
+
+      // hide/show form
+      const formCard = document.getElementById('contact-form-card');
+      const maxHint  = document.getElementById('form-max-hint');
+      if (formCard) formCard.style.display = contacts.length >= 2 ? 'none' : 'block';
+      if (maxHint)  maxHint.hidden = contacts.length < 2;
+
+    } catch (err) {
+      console.error('Failed to load contacts:', err);
+      document.getElementById('contacts-list').innerHTML =
+        '<p class="error-msg">Failed to load contacts. Try refreshing.</p>';
+    }
+  }
+
+  // ── Add Contact ──────────────────────────────────────────────────────────
+  document.getElementById('add-contact-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name         = document.getElementById('contact-name').value.trim();
+    const email        = document.getElementById('contact-email').value.trim();
+    const phone        = document.getElementById('contact-phone').value.trim();
+    const relationship = document.getElementById('contact-relation').value;
+
+    if (!name || !email || !phone || !relationship) {
+      showFormError('Name, email, phone, and relationship are required.');
+      return;
+    }
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.disabled = true;
+    btn.textContent = 'Adding…';
+
+    try {
+      const res = await AUTH.post('/api/safety/emergency-contact', { name, email, phone, relationship });
+      if (res.success) {
+        showFormSuccess('Contact added successfully!');
+        e.target.reset();
+        setTimeout(() => loadContacts(), 800);
+      }
+    } catch (err) {
+      showFormError(err.message || 'Failed to add contact.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Add Contact';
+    }
+  });
+
+  // ── Delete Contact ───────────────────────────────────────────────────────
+  async function deleteContact(contactId) {
+    if (!confirm('Remove this emergency contact?')) return;
+    try {
+      const res = await AUTH.delete(`/api/safety/emergency-contact/${contactId}`);
+      if (res.success) loadContacts();
+    } catch {
+      alert('Failed to delete contact. Please try again.');
+    }
+  }
+
+  // ── Emergency Alert Button ───────────────────────────────────────────────
+  document.getElementById('shake-alert-btn').addEventListener('click', () => {
+    if (!alertInProgress) showAlertModal();
+  });
+
+  function showAlertModal() {
+    alertInProgress = true;
+    const modal = document.getElementById('alert-modal');
+    modal.classList.remove('hidden');
+
+    let countdown = 10;
+    const countdownEl = document.getElementById('countdown');
+    countdownEl.textContent = countdown;
+
+    const timer = setInterval(() => {
+      countdown--;
+      countdownEl.textContent = countdown;
+      if (countdown <= 0) {
+        clearInterval(timer);
+        hideAlertModal();
+        sendAlert();
+      }
+    }, 1000);
+
+    window._alertTimer = timer;
+  }
+
+  function hideAlertModal() {
+    document.getElementById('alert-modal').classList.add('hidden');
+    if (window._alertTimer) clearInterval(window._alertTimer);
+    alertInProgress = false;
+    document.getElementById('countdown').textContent = '10';
+  }
+
+  document.getElementById('cancel-alert-btn').addEventListener('click', hideAlertModal);
+  document.getElementById('modal-overlay').addEventListener('click', hideAlertModal);
+
+  document.getElementById('confirm-alert-btn').addEventListener('click', async () => {
+    hideAlertModal();
+    await sendAlert();
+  });
+
+  // ── Send Emergency Alert ─────────────────────────────────────────────────
+  async function sendAlert() {
+    try {
+      const position = await new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+        })
+      );
+
+      const { latitude, longitude } = position.coords;
+
+      const res = await AUTH.post('/api/safety/shake-alert', {
+        lat: latitude,
+        lon: longitude,
+        addressText: 'User sent emergency alert',
+      });
+
+      if (res.success) {
+        const names = (res.contacts || []).map(c => c.name).join(', ') || 'your contacts';
+        alert(`✓ Alert sent to ${res.contactsNotified} contact(s): ${names}`);
+      }
+    } catch (err) {
+      console.error('Alert failed:', err);
+      alert('Alert could not be sent. Please ensure location access is enabled.');
+    }
+  }
+
+  // ── Location Toggle ──────────────────────────────────────────────────────
+  document.getElementById('location-toggle').addEventListener('change', (e) => {
+    document.getElementById('location-status').textContent = e.target.checked ? 'On' : 'Off';
+  });
+
+  // ── Test Location ────────────────────────────────────────────────────────
+  document.getElementById('test-location-btn').addEventListener('click', async () => {
+    try {
+      const pos = await new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+        })
+      );
+      alert(`Location access successful!\nLat: ${pos.coords.latitude.toFixed(4)}\nLon: ${pos.coords.longitude.toFixed(4)}`);
+    } catch {
+      alert('Location access denied or unavailable. Please enable it in browser settings.');
+    }
+  });
+
+  document.getElementById('view-location-btn').addEventListener('click', () => {
+    alert('Last known location feature coming soon.');
+  });
+
+  // ── Form helpers ─────────────────────────────────────────────────────────
+  function showFormError(msg) {
+    const el = document.getElementById('form-error');
+    el.textContent = msg;
+    el.hidden = false;
+    document.getElementById('form-success').hidden = true;
+  }
+
+  function showFormSuccess(msg) {
+    const el = document.getElementById('form-success');
+    el.textContent = msg;
+    el.hidden = false;
+    document.getElementById('form-error').hidden = true;
+  }
+
+  // ── Nav helpers ──────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Date
+    const dateEl = document.getElementById('dashDate');
+    if (dateEl) {
+      dateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+      });
+    }
+
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', () => AUTH.logout());
+    document.getElementById('navLogoutBtn')?.addEventListener('click', () => AUTH.logout());
+
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const menu   = document.getElementById('mobileMenu');
+    toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
+
+    // Wait for auth
+    const authUser = await AUTH.whenReady();
+    if (!authUser) return;
+
+    // Greet
+    const user      = AUTH.getUser();
+    const firstName = (user?.name || user?.fullName || '').split(' ')[0] || '';
+    if (firstName) {
+      const greeting = document.getElementById('navGreeting');
+      if (greeting) greeting.innerHTML = `Hi, <strong style="color:var(--text-dark);">${firstName}</strong> 👋`;
+      const sidebarName = document.getElementById('sidebarName');
+      if (sidebarName) sidebarName.textContent = firstName;
+      const sidebarAvatar = document.getElementById('sidebarAvatar');
+      if (sidebarAvatar) sidebarAvatar.textContent = (firstName[0] || 'U').toUpperCase();
+      const sidebarUserName = document.getElementById('sidebarUserName');
+      if (sidebarUserName) sidebarUserName.textContent = user.name || user.fullName || '';
+      const sidebarEmail = document.getElementById('sidebarEmail');
+      if (sidebarEmail) sidebarEmail.textContent = user.email || '';
+    }
+
+    // Load data
+    loadContacts();
+  });
+  </script>
+  <script src="../js/chatbot-widget.js"></script>
+
+</body>
+</html>

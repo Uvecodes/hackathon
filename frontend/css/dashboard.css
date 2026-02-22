@@ -122,6 +122,21 @@
 }
 .sidebar-logout:hover { background: rgba(224,92,92,0.08); color: #e05c5c; }
 
+/* ── NAV LOGOUT BUTTON (top-right in dashboard nav) ── */
+.dash-nav-logout {
+  background: none;
+  border: 1.5px solid rgba(180,120,90,0.25);
+  border-radius: var(--radius-pill);
+  padding: 0.4rem 1rem;
+  font-family: var(--font-sub);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.dash-nav-logout:hover { border-color: #e05c5c; color: #e05c5c; }
+
 /* ── MAIN CONTENT ── */
 .dash-main {
   grid-column: 2;

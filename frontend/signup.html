@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Mother Suite — Create Account</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/auth.css">
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#d4876e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="The Mother Suite">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Blob backgrounds -->
+  <div class="blob-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ── PRELOADER ── -->
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <span class="preloader-icon">🌸</span>
+      <span class="preloader-logo">The Mother Suite</span>
+    </div>
+  </div>
+
+  <!-- ── PWA UPDATE BANNER ── -->
+  <div id="pwa-update-banner" class="pwa-update-banner" hidden role="status">
+    <span>A new version is available.</span>
+    <button id="pwa-update-btn" class="pwa-update-btn">Update</button>
+    <button id="pwa-dismiss-btn" class="pwa-dismiss-btn" aria-label="Dismiss">✕</button>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="index.html" class="nav-logo">The Mother Suite</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="login.html" class="nav-cta">Log In</a></li>
+      <li>
+        <button type="button" id="pwa-install-btn" class="nav-pwa-btn" hidden aria-label="Install app">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Install
+        </button>
+      </li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="login.html" class="mobile-cta">Log In</a>
+    <button type="button" id="pwa-install-btn-mobile" class="mobile-pwa-btn" hidden aria-label="Install app">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Install App
+    </button>
+  </div>
+
+  <!-- ── AUTH LAYOUT ── -->
+  <main class="auth-page signup-page">
+
+    <!-- LEFT — visual / brand panel -->
+    <div class="auth-visual">
+
+      <!-- Decorative soft circles -->
+      <div class="visual-circle vc-1"></div>
+      <div class="visual-circle vc-2"></div>
+      <div class="visual-circle vc-3"></div>
+
+      <!-- Orbiting icon cluster -->
+      <div class="visual-icon-cluster">
+        <div class="vic-main">🌸</div>
+        <div class="vic-orbit vic-o1">👶</div>
+        <div class="vic-orbit vic-o2">💛</div>
+        <div class="vic-orbit vic-o3">🌿</div>
+      </div>
+
+      <!-- Tagline -->
+      <div class="auth-visual-tagline">
+        <h2>Your <em>journey</em><br>starts here.</h2>
+        <p>Join thousands of mothers who use The Mother Suite to feel supported every step of the way.</p>
+      </div>
+
+      <!-- Feature badges -->
+      <div class="auth-badges">
+        <span class="auth-badge">🤰 Prenatal Tracking</span>
+        <span class="auth-badge">👶 Baby Milestones</span>
+        <span class="auth-badge">🔊 Cry Detector</span>
+        <span class="auth-badge">💬 Community</span>
+      </div>
+
+    </div>
+
+    <!-- RIGHT — form panel -->
+    <div class="auth-form-panel">
+
+      <div class="auth-header">
+        <div class="auth-eyebrow">Create Account</div>
+        <h1 class="auth-title">Welcome to<br><em>The Mother Suite.</em></h1>
+        <p class="auth-subtitle" id="step-subtitle">Step 1 of 4 — Basic Info</p>
+      </div>
+
+      <!-- Messages (global — visible regardless of active step) -->
+      <div id="authError"   class="auth-error"   role="alert"  style="display:none;margin-bottom:1rem;"></div>
+      <div id="authSuccess" class="auth-success"  role="status" style="display:none;margin-bottom:1rem;"></div>
+
+      <!-- ── STEP PROGRESS BAR ── -->
+      <div class="signup-step-bar" aria-label="Sign-up progress">
+
+        <div class="step-dot-wrap active" id="dot-1">
+          <div class="step-dot">1</div>
+          <span class="step-dot-label">Basics</span>
+        </div>
+
+        <div class="step-connector" id="conn-1"></div>
+
+        <div class="step-dot-wrap" id="dot-2">
+          <div class="step-dot">2</div>
+          <span class="step-dot-label">Body</span>
+        </div>
+
+        <div class="step-connector" id="conn-2"></div>
+
+        <div class="step-dot-wrap" id="dot-3">
+          <div class="step-dot">3</div>
+          <span class="step-dot-label">Health</span>
+        </div>
+
+        <div class="step-connector" id="conn-3"></div>
+
+        <div class="step-dot-wrap" id="dot-4">
+          <div class="step-dot">4</div>
+          <span class="step-dot-label">Postpartum</span>
+        </div>
+
+      </div>
+      <!-- end step bar -->
+
+      <!-- ── SIGNUP FORM ── -->
+      <form class="auth-form" id="signupForm" novalidate>
+
+        <!-- ════════════ STEP 1 — Basic Info ════════════ -->
+        <div class="signup-step-panel active" id="step-1">
+
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <div class="input-wrap">
+              <input
+                class="form-input"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="jane@example.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+            <span class="form-hint">We'll never share your email.</span>
+          </div>
+
+          <!-- Full name -->
+          <div class="form-group">
+            <label class="form-label" for="fullName">Full Name</label>
+            <div class="input-wrap">
+              <input
+                class="form-input"
+                type="text"
+                id="fullName"
+                name="fullName"
+                placeholder="Jane Smith"
+                autocomplete="name"
+                required
+              />
+            </div>
+          </div>
+
+          <!-- Pregnancy stage -->
+          <div class="form-group">
+            <label class="form-label" for="pregnancyStage">Where are you in your journey?</label>
+            <select class="form-select" id="pregnancyStage" name="pregnancyStage" required>
+              <option value="">— Select your stage —</option>
+              <option value="preconception">Pre-conception (planning to conceive)</option>
+              <option value="trimester-1">Trimester 1 (Weeks 1–13)</option>
+              <option value="trimester-2">Trimester 2 (Weeks 14–26)</option>
+              <option value="trimester-3">Trimester 3 (Weeks 27–40)</option>
+              <option value="postpartum-0-6w">Postpartum — 0 to 6 weeks after birth</option>
+              <option value="postpartum-6w-6m">Postpartum — 6 weeks to 6 months</option>
+              <option value="postpartum-6m+">Postpartum — 6 months+</option>
+            </select>
+          </div>
+
+          <!-- Due date (shown only for trimester stages) -->
+          <div class="form-group" id="duedate-group" style="display:none;">
+            <label class="form-label" for="dueDate">
+              Expected Due Date <span class="label-optional">(optional)</span>
+            </label>
+            <div class="input-wrap">
+              <input
+                class="form-input"
+                type="date"
+                id="dueDate"
+                name="dueDate"
+              />
+            </div>
+            <span class="form-hint">Helps us personalise your weekly content.</span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <div class="input-wrap">
+              <input
+                class="form-input"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Min. 8 characters"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="toggle-pw" data-target="password" aria-label="Toggle password visibility">👁</button>
+            </div>
+            <!-- Strength indicator -->
+            <div class="strength-wrap">
+              <div class="strength-track">
+                <div class="strength-bar-fill" id="strengthBar"></div>
+              </div>
+              <div class="strength-label" id="strengthLabel"></div>
+            </div>
+          </div>
+
+          <!-- Confirm password -->
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword">Confirm Password</label>
+            <div class="input-wrap">
+              <input
+                class="form-input"
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Re-enter password"
+                autocomplete="new-password"
+                required
+              />
+              <button type="button" class="toggle-pw" data-target="confirmPassword" aria-label="Toggle password visibility">👁</button>
+            </div>
+          </div>
+
+          <!-- Terms -->
+          <div class="form-group form-checkbox">
+            <input
+              class="checkbox-input"
+              type="checkbox"
+              id="terms"
+              name="terms"
+              required
+            />
+            <label class="checkbox-label" for="terms">
+              I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+            </label>
+          </div>
+
+          <!-- Step 1 Continue (disabled until all required fields are valid) -->
+          <button type="button" class="auth-submit" id="next-1" disabled style="margin-top:0.5rem;">
+            Continue →
+          </button>
+
+        </div>
+        <!-- end step 1 -->
+
+        <!-- ════════════ STEP 2 — Body Metrics ════════════ -->
+        <div class="signup-step-panel" id="step-2">
+
+          <p class="step-hint">
+            These help us calculate your personalised calorie and nutrition targets.
+            All fields on this step are optional.
+          </p>
+
+          <div class="form-row">
+            <!-- Age -->
+            <div class="form-group">
+              <label class="form-label" for="age">
+                Age <span class="label-optional">(optional)</span>
+              </label>
+              <input
+                class="form-input"
+                type="number"
+                id="age"
+                name="age"
+                placeholder="28"
+                min="15" max="60"
+              />
+            </div>
+
+            <!-- Height -->
+            <div class="form-group">
+              <label class="form-label" for="heightCm">
+                Height (cm) <span class="label-optional">(optional)</span>
+              </label>
+              <input
+                class="form-input"
+                type="number"
+                id="heightCm"
+                name="heightCm"
+                placeholder="165"
+                min="100" max="250" step="0.1"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <!-- Pre-pregnancy weight -->
+            <div class="form-group">
+              <label class="form-label" for="prePregnancyWeightKg">
+                Pre-pregnancy weight (kg) <span class="label-optional">(optional)</span>
+              </label>
+              <input
+                class="form-input"
+                type="number"
+                id="prePregnancyWeightKg"
+                name="prePregnancyWeightKg"
+                placeholder="65"
+                min="30" max="300" step="0.1"
+              />
+            </div>
+
+            <!-- Current weight -->
+            <div class="form-group">
+              <label class="form-label" for="currentWeightKg">
+                Current weight (kg) <span class="label-optional">(optional)</span>
+              </label>
+              <input
+                class="form-input"
+                type="number"
+                id="currentWeightKg"
+                name="currentWeightKg"
+                placeholder="70"
+                min="30" max="300" step="0.1"
+              />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <!-- Fitness level -->
+            <div class="form-group">
+              <label class="form-label" for="fitnessLevel">
+                Fitness level <span class="label-optional">(optional)</span>
+              </label>
+              <select class="form-select" id="fitnessLevel" name="fitnessLevel">
+                <option value="">— Select —</option>
+                <option value="sedentary">Sedentary (little/no exercise)</option>
+                <option value="beginner">Beginner (light, 1–2×/week)</option>
+                <option value="moderate">Moderate (3–4×/week)</option>
+                <option value="active">Active (5+×/week)</option>
+                <option value="athlete">Athlete (intense daily)</option>
+              </select>
+            </div>
+
+            <!-- Activity level -->
+            <div class="form-group">
+              <label class="form-label" for="activityLevel">
+                Daily activity <span class="label-optional">(optional)</span>
+              </label>
+              <select class="form-select" id="activityLevel" name="activityLevel">
+                <option value="">— Select —</option>
+                <option value="low">Low (mostly sitting)</option>
+                <option value="moderate">Moderate (some walking)</option>
+                <option value="high">High (on feet most of day)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="step-nav">
+            <button type="button" class="btn-back-step" id="back-2">← Back</button>
+            <button type="button" class="btn-next-step" id="next-2">Continue →</button>
+          </div>
+
+        </div>
+        <!-- end step 2 -->
+
+        <!-- ════════════ STEP 3 — Health Profile ════════════ -->
+        <div class="signup-step-panel" id="step-3">
+
+          <p class="step-hint">
+            Select any that apply. This helps us tailor your exercises, meals, and safety alerts.
+            All fields are optional.
+          </p>
+
+          <!-- Medical conditions -->
+          <div class="form-group">
+            <label class="form-label">
+              Medical conditions <span class="label-optional">(optional)</span>
+            </label>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" name="conditions" value="pcos"> PCOS</label>
+              <label><input type="checkbox" name="conditions" value="endometriosis"> Endometriosis</label>
+              <label><input type="checkbox" name="conditions" value="thyroid-disorder"> Thyroid disorder</label>
+              <label><input type="checkbox" name="conditions" value="diabetes-type-1"> Diabetes type 1</label>
+              <label><input type="checkbox" name="conditions" value="diabetes-type-2"> Diabetes type 2</label>
+              <label><input type="checkbox" name="conditions" value="hypertension"> Hypertension</label>
+              <label><input type="checkbox" name="conditions" value="anemia"> Anaemia</label>
+              <label><input type="checkbox" name="conditions" value="asthma"> Asthma</label>
+              <label><input type="checkbox" name="conditions" value="depression"> Depression</label>
+              <label><input type="checkbox" name="conditions" value="anxiety"> Anxiety</label>
+              <label><input type="checkbox" name="conditions" value="gestational-diabetes"> Gestational diabetes</label>
+              <label><input type="checkbox" name="conditions" value="gestational-hypertension"> Gestational hypertension</label>
+              <label><input type="checkbox" name="conditions" value="preeclampsia"> Preeclampsia</label>
+              <label><input type="checkbox" name="conditions" value="hyperemesis-gravidarum"> Hyperemesis gravidarum</label>
+              <label><input type="checkbox" name="conditions" value="placenta-previa"> Placenta praevia</label>
+              <label><input type="checkbox" name="conditions" value="multiples-pregnancy"> Multiple pregnancy (twins+)</label>
+            </div>
+          </div>
+
+          <!-- Food allergies -->
+          <div class="form-group">
+            <label class="form-label">
+              Food allergies <span class="label-optional">(optional)</span>
+            </label>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" name="allergies" value="peanuts"> Peanuts</label>
+              <label><input type="checkbox" name="allergies" value="tree-nuts"> Tree nuts</label>
+              <label><input type="checkbox" name="allergies" value="dairy"> Dairy</label>
+              <label><input type="checkbox" name="allergies" value="eggs"> Eggs</label>
+              <label><input type="checkbox" name="allergies" value="soy"> Soy</label>
+              <label><input type="checkbox" name="allergies" value="wheat"> Wheat</label>
+              <label><input type="checkbox" name="allergies" value="shellfish"> Shellfish</label>
+              <label><input type="checkbox" name="allergies" value="fish"> Fish</label>
+              <label><input type="checkbox" name="allergies" value="sesame"> Sesame</label>
+            </div>
+          </div>
+
+          <!-- Food intolerances -->
+          <div class="form-group">
+            <label class="form-label">
+              Food intolerances <span class="label-optional">(optional)</span>
+            </label>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" name="foodIntolerances" value="lactose"> Lactose</label>
+              <label><input type="checkbox" name="foodIntolerances" value="gluten"> Gluten</label>
+              <label><input type="checkbox" name="foodIntolerances" value="histamine"> Histamine</label>
+              <label><input type="checkbox" name="foodIntolerances" value="fodmap"> FODMAP</label>
+            </div>
+          </div>
+
+          <!-- Dietary preferences -->
+          <div class="form-group">
+            <label class="form-label">
+              Dietary preferences <span class="label-optional">(optional)</span>
+            </label>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" name="dietaryPreferences" value="vegetarian"> Vegetarian</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="vegan"> Vegan</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="pescatarian"> Pescatarian</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="omnivore"> Omnivore</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="keto"> Keto</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="paleo"> Paleo</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="mediterranean"> Mediterranean</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="halal"> Halal</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="kosher"> Kosher</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="gluten-free"> Gluten-free</label>
+              <label><input type="checkbox" name="dietaryPreferences" value="dairy-free"> Dairy-free</label>
+            </div>
+          </div>
+
+          <div class="step-nav">
+            <button type="button" class="btn-back-step" id="back-3">← Back</button>
+            <!-- Shown for postpartum stages → proceed to step 4 -->
+            <button type="button" class="btn-next-step" id="next-3" style="display:none;">Continue →</button>
+            <!-- Shown for non-postpartum stages → final submit -->
+            <button type="submit"  class="btn-next-step" id="submit-3">Create Account 🌸</button>
+          </div>
+
+        </div>
+        <!-- end step 3 -->
+
+        <!-- ════════════ STEP 4 — Postpartum Details ════════════ -->
+        <!-- Only navigated to when stage is postpartum-* -->
+        <div class="signup-step-panel" id="step-4">
+
+          <p class="step-hint">
+            A few more details to personalise your postpartum recovery plan.
+            All fields are optional.
+          </p>
+
+          <!-- Delivery date -->
+          <div class="form-group">
+            <label class="form-label" for="deliveryDate">
+              Delivery date <span class="label-optional">(optional)</span>
+            </label>
+            <div class="input-wrap">
+              <input class="form-input" type="date" id="deliveryDate" name="deliveryDate"/>
+            </div>
+          </div>
+
+          <!-- Type of delivery -->
+          <div class="form-group">
+            <label class="form-label" for="recoveryType">
+              Type of delivery <span class="label-optional">(optional)</span>
+            </label>
+            <select class="form-select" id="recoveryType" name="recoveryType">
+              <option value="">— Select —</option>
+              <option value="vaginal">Vaginal birth</option>
+              <option value="c-section">C-section</option>
+              <option value="assisted-vaginal">Assisted vaginal (forceps / ventouse)</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <!-- Feeding -->
+          <div class="form-group">
+            <label class="form-label">
+              Feeding <span class="label-optional">(optional)</span>
+            </label>
+            <div class="checkbox-grid">
+              <label>
+                <input type="checkbox" id="breastfeeding" name="breastfeeding" value="true">
+                Breastfeeding
+              </label>
+              <label>
+                <input type="checkbox" id="pumping" name="pumping" value="true">
+                Pumping
+              </label>
+            </div>
+          </div>
+
+          <div class="step-nav">
+            <button type="button" class="btn-back-step" id="back-4">← Back</button>
+            <button type="submit"  class="btn-next-step" id="submit-4">Create Account 🌸</button>
+          </div>
+
+        </div>
+        <!-- end step 4 -->
+
+      </form>
+      <!-- end signupForm -->
+
+      <p class="auth-switch">
+        Already have an account? <a href="login.html">Log in →</a>
+      </p>
+
+    </div>
+    <!-- end form panel -->
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <a href="index.html" class="footer-logo">The Mother Suite</a>
+    <p class="footer-copy">© <span id="footer-year"></span> The Mother Suite. Made with 💛 for every mama.</p>
+  </footer>
+
+  <!-- Firebase SDK (compat) — must load before auth.js and signup.js -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+
+  <!-- App scripts (auth.js first — provides window.AUTH for signup.js) -->
+  <script src="js/shared.js"></script>
+  <script src="js/pwa.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/signup.js"></script>
+
+  <script>
+    const yr = document.getElementById('footer-year');
+    if (yr) yr.textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

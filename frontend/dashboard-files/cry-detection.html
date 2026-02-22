@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en" data-require-auth>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Mother Suite — Cry Detector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/shared.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/cry-detection.css">
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <div class="blob-bg">
+    <div class="blob blob-1" style="opacity:0.09;"></div>
+    <div class="blob blob-2" style="opacity:0.07;"></div>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="dashboard.html" class="nav-logo">The Mother Suite</a>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <div id="navGreeting" style="font-size:0.82rem;color:var(--text-soft);font-family:var(--font-sub);">Hi, <strong style="color:var(--text-dark);">there</strong> 👋</div>
+      <button id="navLogoutBtn" class="dash-nav-logout">Log out</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="tracker.html">Baby Tracker</a>
+    <a href="community.html">Community</a>
+    <a href="wellness.html">Wellness</a>
+    <a href="safety.html">Safety</a>
+    <a href="cry-detection.html">Cry Detector</a>
+  </div>
+
+  <!-- ── DASHBOARD LAYOUT ── -->
+  <div class="dashboard-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-greeting">
+        <div class="greet-label">Logged in as</div>
+        <div class="greet-name" id="sidebarName">—</div>
+        <div class="greet-sub" id="sidebarSub">mama 🌿</div>
+      </div>
+
+      <div class="sidebar-nav">
+        <a href="dashboard.html" class="sidebar-link">
+          <span class="sl-icon">🏠</span> Dashboard
+        </a>
+        <a href="tracker.html" class="sidebar-link">
+          <span class="sl-icon">👶</span> Baby Tracker
+        </a>
+        <a href="wellness.html" class="sidebar-link">
+          <span class="sl-icon">🌿</span> Wellness
+        </a>
+        <a href="community.html" class="sidebar-link">
+          <span class="sl-icon">💬</span> Community
+        </a>
+        <a href="safety.html" class="sidebar-link">
+          <span class="sl-icon">🛡️</span> Safety
+        </a>
+        <a href="cry-detection.html" class="sidebar-link active">
+          <span class="sl-icon">🔊</span> Cry Detector
+        </a>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar" id="sidebarAvatar">👩</div>
+          <div>
+            <div class="sidebar-user-name" id="sidebarUserName">—</div>
+            <div class="sidebar-user-email" id="sidebarEmail"></div>
+          </div>
+        </div>
+        <button class="sidebar-logout" id="logoutBtn">Log out</button>
+      </div>
+
+    </aside>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="dash-main">
+
+      <!-- Page header -->
+      <div class="dash-topbar">
+        <div>
+          <h1>Baby Cry <em>Monitor.</em></h1>
+          <p class="dash-topbar-sub">Understand your baby's needs through intelligent cry detection.</p>
+        </div>
+        <div class="dash-topbar-date" id="dashDate"></div>
+      </div>
+
+      <!-- ── MONITOR CARD ── -->
+      <div class="monitor-card">
+        <h2>Start Listening</h2>
+
+        <div class="monitor-controls">
+          <!-- Mic Permission -->
+          <div class="permission-info" id="permission-info" hidden>
+            <p>📱 This feature requires microphone access</p>
+            <button type="button" class="btn-secondary" id="request-mic-btn">Grant Microphone Access</button>
+          </div>
+
+          <!-- Monitor Status -->
+          <div class="monitor-status" id="monitor-status" hidden>
+            <div class="status-badge">
+              <span class="status-dot" id="status-dot"></span>
+              <span class="status-text" id="status-text">Ready</span>
+            </div>
+
+            <!-- Frequency Visualisation -->
+            <div class="frequency-display" id="frequency-display">
+              <canvas id="frequencyCanvas" width="600" height="80"></canvas>
+            </div>
+
+            <!-- dB Level -->
+            <div class="db-display">
+              <div class="db-label">
+                <span>Sound Level</span>
+                <span><span class="db-value" id="db-value">--</span> dB</span>
+              </div>
+              <div class="db-bar-container">
+                <div class="db-bar" id="db-bar"></div>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+              <button type="button" class="btn-primary" id="start-monitor-btn">Start Monitoring</button>
+              <button type="button" class="btn-secondary" id="stop-monitor-btn" hidden>Stop Monitoring</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Test Button -->
+        <button type="button" class="btn-text" id="test-audio-btn" style="margin-top:1rem;">
+          Test with Sample Audio
+        </button>
+      </div>
+
+      <!-- ── RESULT CARD ── -->
+      <section id="result-card" class="result-card hidden">
+        <div class="result-header">
+          <span class="result-emoji" id="result-emoji">👶</span>
+          <div class="result-header-text">
+            <h3 class="result-title" id="result-title">Analyzing…</h3>
+            <span class="result-source-badge" id="result-source-badge" hidden></span>
+          </div>
+        </div>
+
+        <div class="result-content">
+          <div class="result-description" id="result-description"></div>
+
+          <div class="result-confidence">
+            <span class="confidence-label">Confidence:</span>
+            <div class="confidence-bar">
+              <div class="confidence-fill" id="confidence-fill"></div>
+            </div>
+            <span class="confidence-percent" id="confidence-percent">0%</span>
+          </div>
+
+          <!-- ML probability breakdown -->
+          <div id="prob-breakdown" class="prob-breakdown hidden">
+            <h4>All Probabilities</h4>
+            <div id="prob-bars" class="prob-bars"></div>
+          </div>
+
+          <div class="result-suggestions">
+            <h4>What to try:</h4>
+            <ul id="suggestions-list"></ul>
+          </div>
+
+          <div class="result-actions">
+            <button type="button" class="btn-secondary" id="advanced-analysis-btn">
+              🔬 Advanced Analysis (10s)
+            </button>
+            <button type="button" class="btn-text" id="close-result-btn">Close</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── RECORDING PROGRESS ── -->
+      <div id="recording-progress" class="recording-progress hidden">
+        <div class="recording-icon">🎙️</div>
+        <h3>Recording Audio</h3>
+        <p class="recording-hint">Hold your device near the baby…</p>
+        <div class="recording-countdown">
+          <span id="recording-seconds">10</span><span class="recording-unit">s</span>
+        </div>
+        <div class="recording-bar-container">
+          <div class="recording-bar" id="recording-bar"></div>
+        </div>
+        <button type="button" class="btn-text" id="cancel-recording-btn">Cancel</button>
+      </div>
+
+      <!-- ── HISTORY ── -->
+      <section class="history-section">
+        <div class="cry-section-header">
+          <h2>Recent Detections</h2>
+          <button type="button" class="btn-link" id="refresh-history-btn">Refresh</button>
+        </div>
+
+        <div id="cry-log" class="cry-log">
+          <div class="loading-row">Loading history…</div>
+        </div>
+      </section>
+
+      <!-- ── INSIGHTS ── -->
+      <section class="insights-section">
+        <div class="cry-section-header">
+          <h2>Insights</h2>
+        </div>
+
+        <div class="insights-grid">
+          <div class="insight-card">
+            <span class="insight-icon">📊</span>
+            <h3>Total Analyses</h3>
+            <p class="insight-value" id="total-analyses">0</p>
+          </div>
+
+          <div class="insight-card">
+            <span class="insight-icon">🏆</span>
+            <h3>Most Common Type</h3>
+            <p class="insight-value" id="most-common">--</p>
+          </div>
+
+          <div class="insight-card">
+            <span class="insight-icon">⏱️</span>
+            <h3>Avg Duration</h3>
+            <p class="insight-value" id="avg-duration">--</p>
+          </div>
+
+          <div class="insight-card">
+            <span class="insight-icon">🎯</span>
+            <h3>Avg Confidence</h3>
+            <p class="insight-value" id="avg-confidence">--%</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── HOW IT WORKS ── -->
+      <section class="info-section">
+        <h2>How It Works</h2>
+        <div class="info-cards">
+          <div class="info-card">
+            <span class="info-num">1</span>
+            <h3>Allow Microphone Access</h3>
+            <p>Grant permission to access your device's microphone.</p>
+          </div>
+
+          <div class="info-card">
+            <span class="info-num">2</span>
+            <h3>Start Monitoring</h3>
+            <p>Click "Start Monitoring" to begin listening for baby cries.</p>
+          </div>
+
+          <div class="info-card">
+            <span class="info-num">3</span>
+            <h3>Get Analysis</h3>
+            <p>When a cry is detected, you'll see the type and personalised suggestions.</p>
+          </div>
+
+          <div class="info-card">
+            <span class="info-num">4</span>
+            <h3>Take Action</h3>
+            <p>Use the suggestions to understand and respond to your baby's needs.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- /.dashboard-page -->
+
+  <!-- ── ERROR DIALOG ── -->
+  <div id="error-dialog" class="dialog hidden">
+    <div class="dialog-backdrop" onclick="document.getElementById('error-dialog').classList.add('hidden')"></div>
+    <div class="dialog-content">
+      <h3>Something went wrong</h3>
+      <p id="error-message"></p>
+      <button class="btn-primary" onclick="document.getElementById('error-dialog').classList.add('hidden')">Close</button>
+    </div>
+  </div>
+
+  <!-- ── SCRIPTS ── -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/shared.js"></script>
+  <script src="../js/auth.js"></script>
+  <script>
+  /* ============================================
+     CRY DETECTION — PAGE LOGIC
+     Bloom-adapted from blue-frontend/dashboard-files/cry-detection.html
+     Canvas colors: #fdf0eb (cream bg), #C47B5A (blush-deep bars)
+     ============================================ */
+
+  // ── WAV encoder ─────────────────────────────────────────────────────────────
+  // Encodes Float32Array mono PCM samples into 16-bit PCM WAV ArrayBuffer.
+  function encodeWav(samples, sampleRate) {
+    const dataSize = samples.length * 2;
+    const buf = new ArrayBuffer(44 + dataSize);
+    const v = new DataView(buf);
+    const str = (off, s) => { for (let i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i)); };
+    str(0, 'RIFF');
+    v.setUint32(4, 36 + dataSize, true);
+    str(8, 'WAVE');
+    str(12, 'fmt ');
+    v.setUint32(16, 16, true);
+    v.setUint16(20, 1, true);
+    v.setUint16(22, 1, true);
+    v.setUint32(24, sampleRate, true);
+    v.setUint32(28, sampleRate * 2, true);
+    v.setUint16(32, 2, true);
+    v.setUint16(34, 16, true);
+    str(36, 'data');
+    v.setUint32(40, dataSize, true);
+    let off = 44;
+    for (let i = 0; i < samples.length; i++) {
+      const s = Math.max(-1, Math.min(1, samples[i]));
+      v.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+      off += 2;
+    }
+    return buf;
+  }
+
+  // ── CryAnalyzer ─────────────────────────────────────────────────────────────
+  class CryAnalyzer {
+    constructor() {
+      this.audioContext = null;
+      this.analyser = null;
+      this.mediaStream = null;
+      this.isMonitoring = false;
+      this.animationId = null;
+      this.frequencyData = new Uint8Array(256);
+      this.spectralData = null;
+      this.cryStartTime = null;
+      this.lastDetectionTime = 0;
+      this.lastSpectral = null;
+      this._cancelRecording = null;
+    }
+
+    async init() {
+      try {
+        this.mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = 2048;
+        this.spectralData = new Uint8Array(this.analyser.frequencyBinCount);
+
+        const source = this.audioContext.createMediaStreamSource(this.mediaStream);
+        source.connect(this.analyser);
+        return true;
+      } catch (err) {
+        showError(`Microphone access denied: ${err.message}`);
+        return false;
+      }
+    }
+
+    start() {
+      if (this.isMonitoring || !this.analyser) return;
+      this.isMonitoring = true;
+      this.monitor();
+    }
+
+    stop() {
+      this.isMonitoring = false;
+      if (this.animationId) cancelAnimationFrame(this.animationId);
+      updateMonitorStatus('stopped');
+    }
+
+    getSpectralFeatures() {
+      if (!this.analyser || !this.spectralData) return null;
+      this.analyser.getByteFrequencyData(this.spectralData);
+
+      const sampleRate = this.audioContext.sampleRate;
+      const n = this.spectralData.length;
+      const hzPerBin = sampleRate / this.analyser.fftSize;
+      const tobin = hz => Math.min(n - 1, Math.round(hz / hzPerBin));
+
+      const bLow  = tobin(250);
+      const bFund = tobin(600);
+      const bMid  = tobin(1500);
+      const bHigh = tobin(4000);
+
+      let low = 0, fund = 0, mid = 0, high = 0, vhigh = 0;
+      for (let i = 0; i < n; i++) {
+        const v = this.spectralData[i];
+        if      (i < bLow)  low   += v;
+        else if (i < bFund) fund  += v;
+        else if (i < bMid)  mid   += v;
+        else if (i < bHigh) high  += v;
+        else                vhigh += v;
+      }
+      const total = low + fund + mid + high + vhigh + 1;
+
+      let maxVal = 0, domBin = 0;
+      for (let i = tobin(100); i < bHigh; i++) {
+        if (this.spectralData[i] > maxVal) { maxVal = this.spectralData[i]; domBin = i; }
+      }
+
+      return {
+        lowRatio:         low  / total,
+        fundamentalRatio: fund / total,
+        midRatio:         mid  / total,
+        highRatio:        high / total,
+        dominantBin:      domBin,
+        dominantFreqHz:   Math.round(domBin * hzPerBin),
+      };
+    }
+
+    monitor() {
+      if (!this.isMonitoring) return;
+
+      this.analyser.getByteFrequencyData(this.frequencyData);
+
+      let sum = 0;
+      for (let i = 0; i < this.frequencyData.length; i++) {
+        sum += Math.pow(this.frequencyData[i] / 256, 2);
+      }
+      const rms = Math.sqrt(sum / this.frequencyData.length);
+      const db  = 20 * Math.log10(rms || 0.001);
+
+      updateDBLevel(db);
+      drawFrequency(this.frequencyData);
+
+      const now = Date.now();
+      const cooldownMs = 15000;
+
+      if (rms > 0.02) {
+        if (!this.cryStartTime) {
+          this.cryStartTime = now;
+          updateMonitorStatus('detecting');
+        }
+        const duration = (now - this.cryStartTime) / 1000;
+
+        if (duration >= 2 && now - this.lastDetectionTime > cooldownMs) {
+          this.lastDetectionTime = now;
+          this.lastSpectral = this.getSpectralFeatures();
+          this.detectCry(duration, rms);
+          this.cryStartTime = null;
+        }
+      } else {
+        this.cryStartTime = null;
+        if (now - this.lastDetectionTime > cooldownMs) {
+          updateMonitorStatus('monitoring');
+        }
+      }
+
+      this.animationId = requestAnimationFrame(() => this.monitor());
+    }
+
+    async detectCry(duration, rms) {
+      try {
+        const spectral   = this.lastSpectral;
+        const signalQ    = Math.min(1.0, rms / 0.1);
+        const durFactor  = Math.min(1.0, duration / 8);
+        const specClarity = spectral ? (spectral.fundamentalRatio + spectral.midRatio) : 0.5;
+        const confidence = Math.min(0.95, signalQ * 0.4 + durFactor * 0.3 + specClarity * 0.3);
+
+        const response = await AUTH.post('/api/cry-detection/analyze', {
+          duration,
+          confidence,
+          rms,
+          decibels: 20 * Math.log10(rms || 0.001),
+          spectral,
+        });
+
+        showResult(response.analysis);
+        loadHistory();
+      } catch (err) {
+        console.error('[Cry Detection]', err);
+      }
+    }
+
+    async recordAudio(durationMs = 10000) {
+      if (!this.mediaStream) throw new Error('Microphone not initialized');
+
+      const mimeType = ['audio/webm;codecs=opus', 'audio/webm', 'audio/ogg']
+        .find(t => MediaRecorder.isTypeSupported(t)) || '';
+
+      return new Promise((resolve, reject) => {
+        const recorder = new MediaRecorder(
+          this.mediaStream,
+          mimeType ? { mimeType } : {}
+        );
+        const chunks = [];
+
+        recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+        recorder.onstop = () => {
+          const blob = new Blob(chunks, { type: mimeType || 'audio/webm' });
+          const reader = new FileReader();
+          reader.onload = () => resolve({ base64: reader.result.split(',')[1], mimeType: blob.type });
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        };
+        recorder.onerror = reject;
+
+        this._cancelRecording = () => {
+          if (recorder.state !== 'inactive') recorder.stop();
+          reject(new Error('Recording cancelled'));
+        };
+
+        recorder.start();
+        setTimeout(() => { if (recorder.state !== 'inactive') recorder.stop(); }, durationMs);
+      });
+    }
+
+    async recordAudioAsWav(durationMs = 10000) {
+      if (!this.mediaStream) throw new Error('Microphone not initialized');
+
+      const sampleRate = this.audioContext.sampleRate;
+      const chunks = [];
+
+      return new Promise((resolve, reject) => {
+        const source    = this.audioContext.createMediaStreamSource(this.mediaStream);
+        const processor = this.audioContext.createScriptProcessor(4096, 1, 1);
+        const silence   = this.audioContext.createGain();
+        silence.gain.value = 0;
+
+        processor.onaudioprocess = (e) => {
+          chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+        };
+
+        source.connect(processor);
+        processor.connect(silence);
+        silence.connect(this.audioContext.destination);
+
+        this._cancelRecording = () => {
+          processor.onaudioprocess = null;
+          processor.disconnect();
+          source.disconnect();
+          reject(new Error('Recording cancelled'));
+        };
+
+        setTimeout(() => {
+          processor.onaudioprocess = null;
+          processor.disconnect();
+          source.disconnect();
+
+          const total  = chunks.reduce((s, c) => s + c.length, 0);
+          const merged = new Float32Array(total);
+          let off = 0;
+          for (const c of chunks) { merged.set(c, off); off += c.length; }
+
+          const wavBuf = encodeWav(merged, sampleRate);
+          const blob   = new Blob([wavBuf], { type: 'audio/wav' });
+          const reader = new FileReader();
+          reader.onload  = () => resolve({ base64: reader.result.split(',')[1], mimeType: 'audio/wav' });
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        }, durationMs);
+      });
+    }
+
+    cleanup() {
+      this.stop();
+      if (this.mediaStream) this.mediaStream.getTracks().forEach(t => t.stop());
+      if (this.audioContext) this.audioContext.close();
+    }
+  }
+
+  const analyzer = new CryAnalyzer();
+
+  // ── UI helpers ───────────────────────────────────────────────────────────────
+  function updateMonitorStatus(status) {
+    const map = {
+      ready:      { text: 'Ready',         cls: 'ready' },
+      monitoring: { text: 'Monitoring…',   cls: 'monitoring' },
+      detecting:  { text: 'Cry Detected!', cls: 'detecting' },
+      stopped:    { text: 'Stopped',       cls: 'stopped' },
+    };
+    const s = map[status] || map.ready;
+    document.getElementById('status-text').textContent = s.text;
+    document.getElementById('status-dot').className = 'status-dot ' + s.cls;
+  }
+
+  function updateDBLevel(db) {
+    const clamped = Math.max(-60, Math.min(0, db));
+    document.getElementById('db-bar').style.width = ((clamped + 60) / 60 * 100) + '%';
+    document.getElementById('db-value').textContent = clamped.toFixed(0);
+  }
+
+  function drawFrequency(data) {
+    const canvas = document.getElementById('frequencyCanvas');
+    const ctx = canvas.getContext('2d');
+    const { width, height } = canvas;
+    ctx.fillStyle = '#fdf0eb'; // --cream
+    ctx.fillRect(0, 0, width, height);
+    const bw = width / data.length;
+    ctx.fillStyle = '#C47B5A'; // --blush-deep
+    for (let i = 0; i < data.length; i++) {
+      const bh = (data[i] / 255) * height;
+      ctx.fillRect(i * bw, height - bh, bw - 1, bh);
+    }
+  }
+
+  const LABEL_DISPLAY = {
+    hungry:     { emoji: '🍼', name: 'Hungry' },
+    belly_pain: { emoji: '😖', name: 'Belly Pain' },
+    burping:    { emoji: '💨', name: 'Needs to Burp' },
+    discomfort: { emoji: '😤', name: 'Discomfort' },
+    tired:      { emoji: '😴', name: 'Tired' },
+    pain:       { emoji: '😣', name: 'Pain' },
+    sleepy:     { emoji: '😴', name: 'Sleepy' },
+  };
+
+  function showResult(analysis) {
+    document.getElementById('result-emoji').textContent = analysis.emoji;
+    document.getElementById('result-title').textContent = analysis.label;
+    document.getElementById('result-description').textContent = analysis.advice || analysis.description;
+    document.getElementById('confidence-fill').style.width = analysis.confidence + '%';
+    document.getElementById('confidence-percent').textContent = analysis.confidence + '%';
+    document.getElementById('suggestions-list').innerHTML =
+      analysis.suggestions.map(s => `<li>${s}</li>`).join('');
+
+    // Source badge
+    const badge = document.getElementById('result-source-badge');
+    if (analysis.mlUsed) {
+      badge.textContent = '🤖 AI Model';
+      badge.className = 'result-source-badge badge-ml';
+      badge.hidden = false;
+    } else if (analysis.watsonUsed) {
+      badge.textContent = '🔬 Watson STT';
+      badge.className = 'result-source-badge badge-watson';
+      badge.hidden = false;
+    } else {
+      badge.hidden = true;
+    }
+
+    // Probability breakdown
+    const breakdown = document.getElementById('prob-breakdown');
+    const barsEl    = document.getElementById('prob-bars');
+    if (analysis.allProbabilities && Object.keys(analysis.allProbabilities).length > 0) {
+      const sorted = Object.entries(analysis.allProbabilities).sort((a, b) => b[1] - a[1]);
+      barsEl.innerHTML = sorted.map(([key, prob]) => {
+        const pct  = Math.round(prob * 100);
+        const info = LABEL_DISPLAY[key] || { emoji: '❓', name: key };
+        const isTop = key === Object.keys(analysis.allProbabilities)
+          .reduce((a, b) => analysis.allProbabilities[a] > analysis.allProbabilities[b] ? a : b);
+        return `
+          <div class="prob-row${isTop ? ' prob-row-top' : ''}">
+            <span class="prob-label">${info.emoji} ${info.name}</span>
+            <div class="prob-bar-wrap">
+              <div class="prob-bar-fill" style="width:${pct}%"></div>
+            </div>
+            <span class="prob-pct">${pct}%</span>
+          </div>`;
+      }).join('');
+      breakdown.classList.remove('hidden');
+    } else {
+      breakdown.classList.add('hidden');
+    }
+
+    // Advanced button state
+    const advBtn = document.getElementById('advanced-analysis-btn');
+    if (advBtn) {
+      if (analysis.mlUsed) {
+        advBtn.textContent = '✓ AI Analysis Done';
+        advBtn.disabled = true;
+      } else if (analysis.watsonUsed) {
+        advBtn.textContent = '✓ Watson Analysis Used';
+        advBtn.disabled = true;
+      } else {
+        advBtn.textContent = '🔬 Advanced Analysis (10s)';
+        advBtn.disabled = false;
+      }
+    }
+
+    document.getElementById('result-card').classList.remove('hidden');
+  }
+
+  function hideResult() {
+    document.getElementById('result-card').classList.add('hidden');
+    const advBtn = document.getElementById('advanced-analysis-btn');
+    if (advBtn) { advBtn.textContent = '🔬 Advanced Analysis (10s)'; advBtn.disabled = false; }
+    document.getElementById('prob-breakdown').classList.add('hidden');
+    document.getElementById('result-source-badge').hidden = true;
+  }
+
+  // ── Advanced Analysis ────────────────────────────────────────────────────────
+  async function advancedAnalyze() {
+    if (!analyzer.mediaStream) {
+      showError('Please grant microphone access first, then start monitoring.');
+      return;
+    }
+
+    const advBtn     = document.getElementById('advanced-analysis-btn');
+    const progressEl = document.getElementById('recording-progress');
+    const secEl      = document.getElementById('recording-seconds');
+    const barEl      = document.getElementById('recording-bar');
+
+    advBtn.disabled = true;
+    progressEl.classList.remove('hidden');
+    secEl.textContent = '10';
+    barEl.style.width = '0%';
+
+    let remaining = 10;
+    const interval = setInterval(() => {
+      remaining--;
+      secEl.textContent = remaining;
+      barEl.style.width = `${(10 - remaining) * 10}%`;
+      if (remaining <= 0) clearInterval(interval);
+    }, 1000);
+
+    try {
+      const { base64, mimeType } = await analyzer.recordAudioAsWav(10000);
+      clearInterval(interval);
+      progressEl.classList.add('hidden');
+
+      const response = await AUTH.post('/api/cry-detection/advanced-analyze', {
+        audioBase64: base64,
+        mimeType,
+        spectral: analyzer.lastSpectral,
+        duration: 10,
+      });
+
+      showResult(response.analysis);
+      loadHistory();
+    } catch (err) {
+      clearInterval(interval);
+      progressEl.classList.add('hidden');
+      if (err.message !== 'Recording cancelled') {
+        showError('Advanced analysis failed: ' + err.message);
+      }
+    } finally {
+      advBtn.disabled = false;
+    }
+  }
+
+  // ── History ──────────────────────────────────────────────────────────────────
+  async function loadHistory() {
+    try {
+      const data = await AUTH.get('/api/cry-detection/history');
+      const logs = data.logs || [];
+
+      if (logs.length === 0) {
+        document.getElementById('cry-log').innerHTML =
+          '<p class="empty-msg">No detections yet. Start monitoring to capture your first analysis.</p>';
+      } else {
+        document.getElementById('cry-log').innerHTML = logs.map(log => `
+          <div class="log-entry">
+            <div class="entry-header">
+              <span class="entry-emoji">${log.emoji}</span>
+              <span class="entry-type">${log.label}</span>
+              <span class="entry-source">${log.source === 'watson' ? '🔬' : ''}</span>
+              <span class="entry-time">${new Date(log.timestamp).toLocaleString()}</span>
+            </div>
+            <div class="entry-details">
+              <span class="detail">Duration: ${parseFloat(log.duration).toFixed(1)}s</span>
+              <span class="detail">Confidence: ${log.confidence}%</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const s = data.stats;
+      if (s) {
+        document.getElementById('total-analyses').textContent = s.totalAnalyses;
+        const topType = Object.entries(s.typeBreakdown || {}).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById('most-common').textContent =
+          topType && topType[1] > 0 ? topType[0] : '--';
+        document.getElementById('avg-duration').textContent = s.avgDuration + 's';
+        document.getElementById('avg-confidence').textContent = s.avgConfidence + '%';
+      }
+    } catch {
+      document.getElementById('cry-log').innerHTML =
+        '<p class="error-msg">Failed to load history. Try refreshing.</p>';
+    }
+  }
+
+  function showError(message) {
+    document.getElementById('error-message').textContent = message;
+    document.getElementById('error-dialog').classList.remove('hidden');
+  }
+
+  // ── Event listeners ──────────────────────────────────────────────────────────
+  document.getElementById('request-mic-btn')?.addEventListener('click', async () => {
+    const ok = await analyzer.init();
+    if (ok) {
+      document.getElementById('permission-info').hidden = true;
+      document.getElementById('monitor-status').hidden = false;
+      updateMonitorStatus('ready');
+    }
+  });
+
+  document.getElementById('start-monitor-btn')?.addEventListener('click', () => {
+    analyzer.start();
+    document.getElementById('start-monitor-btn').hidden = true;
+    document.getElementById('stop-monitor-btn').hidden  = false;
+    updateMonitorStatus('monitoring');
+  });
+
+  document.getElementById('stop-monitor-btn')?.addEventListener('click', () => {
+    analyzer.stop();
+    document.getElementById('start-monitor-btn').hidden = false;
+    document.getElementById('stop-monitor-btn').hidden  = true;
+  });
+
+  document.getElementById('close-result-btn')?.addEventListener('click', hideResult);
+  document.getElementById('refresh-history-btn')?.addEventListener('click', loadHistory);
+  document.getElementById('advanced-analysis-btn')?.addEventListener('click', advancedAnalyze);
+
+  document.getElementById('cancel-recording-btn')?.addEventListener('click', () => {
+    if (analyzer._cancelRecording) analyzer._cancelRecording();
+    document.getElementById('recording-progress').classList.add('hidden');
+  });
+
+  document.getElementById('test-audio-btn')?.addEventListener('click', () => {
+    showResult({
+      emoji: '🍼',
+      label: 'Hungry',
+      description: 'Rhythmic, persistent cry — typical hunger pattern.',
+      advice: 'Rhythmic, persistent cry — typical hunger pattern.',
+      confidence: 78,
+      suggestions: [
+        'Offer breast or bottle feed',
+        'Check feeding frequency (8–12× daily for newborns)',
+        'Look for hunger cues: rooting, hands to mouth',
+        'Burp during and after feeding',
+      ],
+      duration: 5.2,
+      source: 'simulation',
+      mlUsed: false,
+      watsonUsed: false,
+      allProbabilities: {},
+    });
+  });
+
+  // ── Init ─────────────────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', async () => {
+    // Date
+    const dateEl = document.getElementById('dashDate');
+    if (dateEl) {
+      dateEl.textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+      });
+    }
+
+    // Logout
+    document.getElementById('logoutBtn')?.addEventListener('click', () => AUTH.logout());
+    document.getElementById('navLogoutBtn')?.addEventListener('click', () => AUTH.logout());
+
+    // Mobile nav toggle
+    const toggle = document.getElementById('navToggle');
+    const menu   = document.getElementById('mobileMenu');
+    toggle?.addEventListener('click', () => menu?.classList.toggle('open'));
+
+    // Auth guard
+    const authUser = await AUTH.whenReady();
+    if (!authUser) return;
+
+    // Greet
+    const user      = AUTH.getUser();
+    const firstName = (user?.name || user?.fullName || '').split(' ')[0] || '';
+    if (firstName) {
+      const greeting = document.getElementById('navGreeting');
+      if (greeting) greeting.innerHTML = `Hi, <strong style="color:var(--text-dark);">${firstName}</strong> 👋`;
+      const sidebarName = document.getElementById('sidebarName');
+      if (sidebarName) sidebarName.textContent = firstName;
+      const sidebarAvatar = document.getElementById('sidebarAvatar');
+      if (sidebarAvatar) sidebarAvatar.textContent = (firstName[0] || 'U').toUpperCase();
+      const sidebarUserName = document.getElementById('sidebarUserName');
+      if (sidebarUserName) sidebarUserName.textContent = user.name || user.fullName || '';
+      const sidebarEmail = document.getElementById('sidebarEmail');
+      if (sidebarEmail) sidebarEmail.textContent = user.email || '';
+    }
+
+    // Show mic permission prompt, load history
+    document.getElementById('permission-info').hidden = false;
+    document.getElementById('monitor-status').hidden  = true;
+    loadHistory();
+  });
+
+  window.addEventListener('beforeunload', () => analyzer.cleanup());
+  </script>
+  <script src="../js/chatbot-widget.js"></script>
+
+</body>
+</html>

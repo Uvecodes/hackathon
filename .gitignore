@@ -36,3 +36,10 @@ coverage/
 dist/
 build/
 firebase-key.json
+
+# ML Training Data & Models (too large for GitHub)
+backend/cry/data/
+backend/cry/model/
+*.safetensors
+*.pt
+*.pth
