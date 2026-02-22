@@ -5,7 +5,7 @@
  */
 const _API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:3000'
-  : 'https://files-copy.onrender.com';
+  : 'https://hackathon-hai8.onrender.com';
 
 window.FIREBASE_CONFIG_READY = fetch(`${_API_BASE}/api/config`)
   .then((res) => {

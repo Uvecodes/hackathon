@@ -22,7 +22,7 @@ const AUTH = {
 
   API_BASE_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:3000'
-    : 'https://files-copy.onrender.com',
+    : 'https://hackathon-hai8.onrender.com',
 
   _auth() {
     return (typeof firebase !== 'undefined' && window.firebaseInitialized)
