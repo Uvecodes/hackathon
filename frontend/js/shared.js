@@ -74,6 +74,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
       });
     });
+
+    // Inject a logout button for dashboard pages (sidebar is hidden on mobile)
+    if (typeof window.AUTH !== 'undefined' && typeof window.AUTH.logout === 'function') {
+      const logoutBtn = document.createElement('button');
+      logoutBtn.className = 'mobile-menu-logout';
+      logoutBtn.textContent = 'Log out';
+      logoutBtn.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        toggle.classList.remove('open');
+        document.body.style.overflow = '';
+        window.AUTH.logout();
+      });
+      mobileMenu.appendChild(logoutBtn);
+    }
   }
 
   // ── SCROLL REVEAL ──
