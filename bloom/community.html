@@ -13,14 +13,33 @@
   <div id="cursor-ring"></div>
   <div class="blob-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
 
-  <nav>
-    <a href="index.html" class="nav-logo">The Mother Suite</a>
+  <!-- ── NAV (logged-in version) ── -->
+  <nav class="nav-logged-in">
+    <a href="dashboard.html" class="nav-logo">The Mother Suite</a>
     <ul class="nav-links">
-      <li><a href="tracker.html" >Baby Tracker</a></li>
       <li><a href="community.html" class="active">Community</a></li>
-      <li><a href="signup.html" class="nav-cta" >Try The Mother Suite Free</a></li>
+      <li><a href="index.html#about">About</a></li>
     </ul>
+    <!-- User avatar + logout in nav on desktop -->
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <div style="font-size:0.82rem;color:var(--text-soft);font-family:var(--font-sub);">Hi, <strong style="color:var(--text-dark);">Jane</strong> 👋</div>
+      <button id="logoutBtn" style="
+        background:none;border:1.5px solid rgba(180,120,90,0.25);
+        border-radius:var(--radius-pill);padding:0.45rem 1rem;
+        font-family:var(--font-sub);font-size:0.78rem;font-weight:600;
+        color:var(--text-mid);transition:all 0.2s;
+      ">Log out</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="community.html">Community</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html">← Back to Dashboard</a>
+  </div>
 
   <div class="page-hero">
     <span class="page-eyebrow">Community</span>
@@ -29,7 +48,7 @@
   </div>
 
   <div class="coming-soon-area">
-    <a href="index.html" class="back-link">← Back to Home</a>
+    <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
     <div class="cs-card">
       <span class="cs-emoji">💬</span>
       <div class="cs-label">In Development</div>

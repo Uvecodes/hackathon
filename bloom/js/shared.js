@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── MOBILE NAV TOGGLE ──
   const toggle     = document.getElementById('navToggle');
   const mobileMenu = document.getElementById('mobileMenu');
+  const nav        = document.querySelector('nav');
 
   if (toggle && mobileMenu) {
     toggle.addEventListener('click', () => {
@@ -55,6 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
         toggle.classList.remove('open');
         document.body.style.overflow = '';
       });
+    });
+  }
+
+  // ── LOGGED-IN NAV COLLAPSE (for community page, etc) ──
+  if (toggle && nav && nav.classList.contains('nav-logged-in')) {
+    toggle.addEventListener('click', () => {
+      nav.classList.toggle('nav-collapsed');
+      toggle.classList.toggle('open');
     });
   }
 

@@ -129,6 +129,27 @@ nav.scrolled { box-shadow: 0 4px 24px rgba(180,110,80,0.08); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* Show toggle on logged-in pages (desktop) */
+.nav-logged-in .nav-toggle {
+  display: flex;
+}
+
+/* Hide nav links on logged-in pages when screen is smaller */
+.nav-logged-in.nav-collapsed .nav-links,
+.nav-logged-in.nav-collapsed > div:not(.nav-toggle) {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, max-height 0.3s;
+}
+
+.nav-logged-in .nav-links,
+.nav-logged-in > div:not(.nav-toggle) {
+  max-height: 100px;
+  opacity: 1;
+  transition: opacity 0.3s, max-height 0.3s;
+}
+
 /* Mobile full-screen menu */
 .mobile-menu {
   display: none; position: fixed; inset: 0; z-index: 490;
