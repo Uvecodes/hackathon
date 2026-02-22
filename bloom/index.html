@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Mother Suite — Your Pregnancy & Baby Companion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <div class="blob-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4" style="width:250px;height:250px;background:var(--sky);top:20%;left:20%;animation-delay:-3s;"></div>
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="index.html" class="nav-logo">The Mother Suite</a>
+    <ul class="nav-links">
+      <li><a href="tracker.html">Baby Tracker</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Log In</a></li>
+      <li><a href="signup.html" class="nav-cta">Try It Free</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="tracker.html">Baby Tracker</a>
+    <a href="community.html">Community</a>
+    <a href="about.html">About</a>
+    <a href="login.html">Log In</a>
+    <a href="signup.html" class="mobile-cta">Try It Free</a>
+  </div>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+
+    <!-- TEXT (isolated) -->
+    <div class="hero-text">
+      <div class="hero-badge">Your pregnancy & baby companion</div>
+      <h1 class="hero-title">
+        Every <em>mama</em> deserves a <span class="sage-word">steady</span> hand.
+      </h1>
+      <p class="hero-desc">
+        The Mother Suite supports working women through every stage — prenatal care, postpartum recovery, and your baby's first year. Designed for the mom who can't always step away from the boardroom.
+      </p>
+      <div class="hero-actions">
+        <a href="signup.html" class="btn-primary">🌸 Start Your Journey</a>
+        <a href="tracker.html" class="btn-ghost">See the Tracker →</a>
+      </div>
+      <p class="hero-note">Free to get started · No credit card required</p>
+    </div>
+
+    <!-- IMAGE (isolated) -->
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+
+        <div class="float-card fc-cry">
+          <span class="fc-icon">🔊</span>
+          <div class="fc-text">
+            <div class="fc-title">Cry Detected</div>
+            <div class="fc-sub">Likely: Hunger</div>
+          </div>
+        </div>
+
+        <div class="float-card fc-feed">
+          <span class="fc-icon">🍼</span>
+          <div class="fc-text">
+            <div class="fc-title">Last Feed</div>
+            <div class="fc-sub">2h 14m ago</div>
+          </div>
+        </div>
+
+        <div class="float-card fc-week">
+          <span class="fc-icon">🌱</span>
+          <div class="fc-text">
+            <div class="fc-title">Week 14</div>
+            <div class="fc-sub">Rolling milestone!</div>
+          </div>
+        </div>
+
+        <div class="phone-mock">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-pill">
+              <span class="pill-icon">👶</span>
+              <div>
+                <div class="pill-label">Baby Luna · 3 months</div>
+                <div class="pill-sub">All vitals looking great 💛</div>
+              </div>
+            </div>
+            <div class="phone-pill">
+              <span class="pill-icon">😴</span>
+              <div>
+                <div class="pill-label">Sleep</div>
+                <div class="pill-sub">9h 20m last night</div>
+              </div>
+            </div>
+            <div class="phone-chart">
+              <div class="chart-label">Weekly Growth</div>
+              <div class="chart-bars">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+            </div>
+            <div class="phone-pill">
+              <span class="pill-icon">✨</span>
+              <div>
+                <div class="pill-label">Tip of the Day</div>
+                <div class="pill-sub">Tummy time builds neck strength!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── STATS ── -->
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num">50k+</div>
+      <div class="stat-label">Mamas supported</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">98%</div>
+      <div class="stat-label">Feel more confident</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">3</div>
+      <div class="stat-label">Key life stages covered</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Always with you</div>
+    </div>
+  </div>
+
+  <!-- ── JOURNEY ── -->
+  <section class="journey">
+    <div class="journey-inner">
+
+      <div class="journey-header reveal">
+        <div class="section-tag">Your Journey</div>
+        <h2 class="section-title">From bump to <em>baby</em> and beyond.</h2>
+        <p class="section-desc">The Mother Suite walks with you through three critical chapters — each one as important as the last.</p>
+      </div>
+
+      <div class="journey-cards">
+
+        <!-- Card 1 — TEXT isolated inside card -->
+        <div class="j-card j-card-wellness reveal">
+          <div class="j-card-num">01</div>
+          <span class="j-icon">🤰</span>
+          <div class="j-title">Prenatal Care</div>
+          <p class="j-desc">Track appointments, symptoms, and baby's development week by week. Stay informed even during back-to-back meetings.</p>
+          <div class="j-tags">
+            <span class="j-tag">Week Tracker</span>
+            <span class="j-tag">Kick Counter</span>
+            <span class="j-tag">OB Notes</span>
+            <span class="j-tag">Birth Plan</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="j-card j-card-postnatal reveal">
+          <div class="j-card-num">02</div>
+          <span class="j-icon">🌿</span>
+          <div class="j-title">Postnatal & Postpartum</div>
+          <p class="j-desc">Recovery isn't linear. The Mother Suite helps you monitor your mental health, physical healing, and navigate returning to work after maternity leave.</p>
+          <div class="j-tags">
+            <span class="j-tag">Mood Journal</span>
+            <span class="j-tag">PPD Check-in</span>
+            <span class="j-tag">Fitness Plan</span>
+            <span class="j-tag">Nutrition</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="j-card j-card-baby reveal">
+          <div class="j-card-num">03</div>
+          <span class="j-icon">👶</span>
+          <div class="j-title">Baby's First Year</div>
+          <p class="j-desc">Log feeds, sleep, diapers, and milestones. Get AI-powered insights so you know exactly what your baby needs — before they even cry.</p>
+          <div class="j-tags">
+            <span class="j-tag">Sleep Log</span>
+            <span class="j-tag">Feed Timer</span>
+            <span class="j-tag">Milestones</span>
+            <span class="j-tag">Growth Charts</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ── -->
+  <section class="features">
+    <div class="features-inner">
+      <div class="features-layout">
+
+        <!-- IMAGE (isolated) -->
+        <div class="features-visual reveal">
+          <div class="feat-img-box">
+            <div class="feat-img-inner">
+              <span>📱</span>
+              App Screenshot /<br>Dashboard Preview
+            </div>
+          </div>
+          <div class="feat-badge-float fba-1">
+            <div class="badge-dot"></div>
+            Nutrition plan updated
+          </div>
+          <div class="feat-badge-float fba-2">
+            <div class="badge-dot" style="background:var(--lavender);"></div>
+            Milestone: First smile! 🎉
+          </div>
+        </div>
+
+        <!-- TEXT (isolated) -->
+        <div class="reveal">
+          <div class="section-tag">Features</div>
+          <h2 class="section-title">Everything in one <em>gentle</em> place.</h2>
+          <p class="section-desc" style="margin-bottom:2rem;">Built for busy, brilliant women who deserve tools as capable as they are.</p>
+          <div class="features-list">
+            <div class="feat-item">
+              <div class="feat-icon-wrap feat-icon-blush">🍽️</div>
+              <div class="feat-text">
+                <div class="feat-title">Nutritional Guidance</div>
+                <p class="feat-desc">Personalized meal plans for each trimester and postpartum recovery. Lactation-friendly recipes included.</p>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon-wrap feat-icon-sage">🏃‍♀️</div>
+              <div class="feat-text">
+                <div class="feat-title">Fitness & Recovery</div>
+                <p class="feat-desc">Safe prenatal workouts and postpartum rehab exercises, adapted to where you are in your journey.</p>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon-wrap feat-icon-lavender">📊</div>
+              <div class="feat-text">
+                <div class="feat-title">Health Dashboard</div>
+                <p class="feat-desc">Track baby weight, sleep patterns, feeding frequency, and diaper logs with beautiful visual charts.</p>
+              </div>
+            </div>
+            <div class="feat-item">
+              <div class="feat-icon-wrap feat-icon-sky">🔊</div>
+              <div class="feat-text">
+                <div class="feat-title">Cry Detector</div>
+                <p class="feat-desc">Audio-based cry analysis helps identify hunger, pain, or tiredness — so you always know what baby needs.</p>
+                <span class="feat-coming">✦ Coming Soon</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CRY DETECTOR SPOTLIGHT ── -->
+  <section class="cry-section">
+    <div class="cry-inner">
+
+      <!-- TEXT (isolated) -->
+      <div class="cry-text reveal">
+        <div class="section-tag">Smart Listening</div>
+        <h2 class="section-title">Know why baby's <em>crying</em> before you're in the room.</h2>
+        <p class="section-desc">Our cry detector uses audio analysis to classify your baby's cries in real time. Every detection is logged and stored — building a personalized pattern profile over time, so insights get smarter the more you use it.</p>
+        <div class="cry-types">
+          <div class="cry-type-card">
+            <span class="ct-emoji">🍼</span>
+            <div class="ct-title">Hunger</div>
+            <div class="ct-desc">Rhythmic, low-pitched cry with pauses</div>
+          </div>
+          <div class="cry-type-card">
+            <span class="ct-emoji">😴</span>
+            <div class="ct-title">Tired</div>
+            <div class="ct-desc">Whiny, nasal, building in intensity</div>
+          </div>
+          <div class="cry-type-card">
+            <span class="ct-emoji">🤕</span>
+            <div class="ct-title">Pain / Discomfort</div>
+            <div class="ct-desc">Sudden, sharp, high-pitched onset</div>
+          </div>
+          <div class="cry-type-card">
+            <span class="ct-emoji">💨</span>
+            <div class="ct-title">Gas / Colic</div>
+            <div class="ct-desc">Continuous, tense with leg pulling</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- IMAGE (isolated) -->
+      <div class="cry-visual reveal">
+        <div class="cry-icon">👶</div>
+        <div class="sound-wave">
+          <div class="sw-bar"></div>
+          <div class="sw-bar"></div>
+          <div class="sw-bar"></div>
+          <div class="sw-bar"></div>
+          <div class="sw-bar"></div>
+          <div class="sw-bar"></div>
+          <div class="sw-bar"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── COMMUNITY ── -->
+  <section class="community">
+    <div class="community-inner">
+
+      <div class="community-header">
+        <!-- TEXT (isolated) -->
+        <div class="reveal">
+          <div class="section-tag">Community</div>
+          <h2 class="section-title">Real mamas, real <em>answers.</em></h2>
+          <p class="section-desc">Share experiences, troubleshoot tough nights, and cheer each other on — built for mothers in the tech world and beyond.</p>
+        </div>
+        <!-- CTA (isolated) -->
+        <div class="reveal" style="text-align:right;">
+          <a href="community.html" class="btn-primary">Join the Community →</a>
+        </div>
+      </div>
+
+      <!-- POSTS — image and text isolated within each card -->
+      <div class="community-posts">
+        <div class="post-card reveal">
+          <div class="post-img bg-blush"><span>🌙</span>Community post image</div>
+          <div class="post-body">
+            <span class="post-tag">Sleep Tips</span>
+            <div class="post-title">4-month sleep regression survival guide for working moms</div>
+          </div>
+        </div>
+        <div class="post-card reveal">
+          <div class="post-img bg-sage"><span>💼</span>Community post image</div>
+          <div class="post-body">
+            <span class="post-tag">Back to Work</span>
+            <div class="post-title">How I negotiated a pumping schedule at my tech startup</div>
+          </div>
+        </div>
+        <div class="post-card reveal">
+          <div class="post-img bg-lavender"><span>🥗</span>Community post image</div>
+          <div class="post-body">
+            <span class="post-tag">Nutrition</span>
+            <div class="post-title">5-minute postpartum meals when you barely have time to eat</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── EXPLORE PAGES ── -->
+  <section class="pages-nav">
+    <div class="pages-inner">
+      <div class="reveal">
+        <div class="section-tag">Explore The Mother Suite</div>
+        <h2 class="section-title">Where would you like to <em>begin?</em></h2>
+      </div>
+      <div class="pages-grid">
+        <a href="tracker.html" class="page-tile pt-tracker reveal">
+          <span class="page-tile-emoji">📈</span>
+          <div>
+            <div class="page-tile-title">Baby Tracker</div>
+            <div class="page-tile-sub">Sleep, feeds & milestones</div>
+          </div>
+          <span class="page-tile-arrow">↗</span>
+        </a>
+        <a href="community.html" class="page-tile pt-community reveal">
+          <span class="page-tile-emoji">💬</span>
+          <div>
+            <div class="page-tile-title">Community</div>
+            <div class="page-tile-sub">Share & troubleshoot</div>
+          </div>
+          <span class="page-tile-arrow">↗</span>
+        </a>
+        <a href="about.html" class="page-tile pt-about reveal">
+          <span class="page-tile-emoji">💛</span>
+          <div>
+            <div class="page-tile-title">About Us</div>
+            <div class="page-tile-sub">Our story & mission</div>
+          </div>
+          <span class="page-tile-arrow">↗</span>
+        </a>
+        <a href="signup.html" class="page-tile pt-signup reveal">
+          <span class="page-tile-emoji">🌸</span>
+          <div>
+            <div class="page-tile-title">Get Started</div>
+            <div class="page-tile-sub">Create your free account</div>
+          </div>
+          <span class="page-tile-arrow">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA BANNER ── -->
+  <div class="cta-section">
+    <div class="cta-banner reveal">
+      <div>
+        <h2>You're doing <em>beautifully.</em><br>Let us help with the rest.</h2>
+        <p>Join thousands of working mamas who use The Mother Suite to feel supported, informed, and never alone — from the first heartbeat to first steps.</p>
+      </div>
+      <div class="cta-buttons">
+        <a href="signup.html" class="btn-primary">🌸 Get Started Free</a>
+        <a href="tracker.html" class="btn-ghost">Explore Features</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <a href="index.html" class="footer-logo">The Mother Suite</a>
+    <ul class="footer-links">
+      <li><a href="tracker.html">Tracker</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Log In</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 The Mother Suite. Made with 💛 for every mama.</p>
+  </footer>
+
+  <script src="js/shared.js"></script>
+</body>
+</html>

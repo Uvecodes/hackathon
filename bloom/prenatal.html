@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Mother Suite — Prenatal Care</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #fdf8f3; --blush: #f5c4b0; --blush-mid: #e8a690; --blush-deep: #d4876e;
+      --sage: #b8ccb5; --sage-dark: #8aaa86; --lavender: #d4c5e2;
+      --text-dark: #3d2e28; --text-mid: #7a5c52; --text-soft: #b09080; --white: #ffffff;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'Nunito', sans-serif;
+      --font-sub: 'Nunito Sans', sans-serif;
+      --radius-pill: 999px;
+    }
+    * { cursor: none !important; }
+    #cursor { width:12px;height:12px;background:var(--blush-deep);border-radius:50%;position:fixed;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:multiply; }
+    #cursor-ring { width:34px;height:34px;border:1.5px solid var(--blush-mid);border-radius:50%;position:fixed;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:left 0.12s ease-out,top 0.12s ease-out; }
+
+    body { background: var(--cream); color: var(--text-dark); font-family: var(--font-body); min-height: 100vh; }
+
+    .blob-bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.28; animation: blobFloat 14s ease-in-out infinite alternate; }
+    .blob-1 { width:500px;height:500px;background:var(--blush);top:-80px;right:-100px; }
+    .blob-2 { width:400px;height:400px;background:var(--sage);bottom:10%;left:-80px;animation-delay:-6s; }
+    @keyframes blobFloat { from{transform:scale(1)} to{transform:scale(1.07) translate(15px,-15px)} }
+
+    nav {
+      position: fixed; top:0;left:0;right:0;z-index:500;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1.1rem 3rem;
+      background:rgba(253,248,243,0.85);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid rgba(232,166,144,0.18);
+    }
+    .nav-logo { font-family:var(--font-display);font-size:1.85rem;font-weight:400;font-style:italic;color:var(--blush-deep);text-decoration:none; }
+    .nav-logo span { font-style:normal;color:var(--sage-dark); }
+    .nav-links { display:flex;gap:2rem;list-style:none;align-items:center; }
+    .nav-links a { font-family:var(--font-sub);font-size:0.88rem;font-weight:500;color:var(--text-mid);text-decoration:none;transition:color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--blush-deep); }
+    .nav-cta { background:var(--blush-deep)!important;color:#fff!important;padding:0.6rem 1.5rem;border-radius:var(--radius-pill);font-weight:600!important; }
+
+    .page-hero {
+      position: relative; z-index: 1;
+      min-height: 38vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+    }
+    .page-eyebrow {
+      font-family: var(--font-sub); font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--sage-dark);
+      margin-bottom: 1rem;
+      display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    .page-eyebrow::before, .page-eyebrow::after { content:''; width:24px;height:1.5px;background:var(--sage-dark); }
+    .page-title {
+      font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 300; line-height: 1.05; color: var(--text-dark);
+    }
+    .page-title em { font-style:italic; color:var(--blush-deep); }
+    .page-subtitle {
+      margin-top: 1.2rem; font-size: 1rem; color: var(--text-soft);
+      max-width: 500px; line-height: 1.75;
+    }
+
+    .coming-soon-area {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 3rem 2rem 8rem;
+      gap: 1.5rem;
+    }
+    .cs-card {
+      background: var(--white); border-radius: 24px;
+      padding: 2.5rem 3rem; text-align: center;
+      box-shadow: 0 8px 40px rgba(180,120,90,0.10);
+      max-width: 480px; width: 100%;
+    }
+    .cs-emoji { font-size: 2.8rem; margin-bottom: 1rem; display: block; }
+    .cs-label { font-family: var(--font-sub); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 0.5rem; }
+    .cs-text { font-size: 0.92rem; color: var(--text-mid); line-height: 1.7; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font-sub); font-size: 0.82rem; font-weight: 600;
+      color: var(--blush-deep); text-decoration: none;
+      transition: gap 0.2s;
+    }
+    .back-link:hover { gap: 0.8rem; }
+
+    footer { border-top: 1px solid rgba(232,166,144,0.2); padding: 2rem 3rem; display:flex;justify-content:space-between;align-items:center; position:relative;z-index:1; }
+    .footer-logo { font-family:var(--font-display);font-size:1.4rem;font-style:italic;color:var(--blush-deep);text-decoration:none; }
+    .footer-copy { font-size:0.72rem;color:var(--text-soft); }
+  </style>
+</head>
+<body>
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+  <div class="blob-bg"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">The Mother Suite</a>
+    <ul class="nav-links">
+      <li><a href="prenatal.html" class="active">Prenatal</a></li>
+      <li><a href="postnatal.html">Postnatal</a></li>
+      <li><a href="tracker.html">Baby Tracker</a></li>
+      <li><a href="nutrition.html">Nutrition</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="demo.html" class="nav-cta">Try The Mother Suite Free</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <span class="page-eyebrow">Prenatal Care</span>
+    <h1 class="page-title">Your <em>pregnancy</em>,<br>week by week.</h1>
+    <p class="page-subtitle">Track appointments, symptoms, and your baby's development — all in one calm, beautiful space.</p>
+  </div>
+
+  <div class="coming-soon-area">
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <div class="cs-card">
+      <span class="cs-emoji">🤰</span>
+      <div class="cs-label">In Development</div>
+      <p class="cs-text">The full Prenatal page is coming soon. This section will include your week-by-week tracker, kick counter, OB appointment notes, and birth plan builder.</p>
+    </div>
+  </div>
+
+  <footer>
+    <a href="index.html" class="footer-logo">The Mother Suite</a>
+    <p class="footer-copy">© 2025 The Mother Suite Made with 💛 for every mama.</p>
+  </footer>
+
+  <script>
+    const c = document.getElementById('cursor'), r = document.getElementById('cursor-ring');
+    document.addEventListener('mousemove', e => { c.style.left=r.style.left=e.clientX+'px'; c.style.top=r.style.top=e.clientY+'px'; });
+  </script>
+</body>
+</html>
