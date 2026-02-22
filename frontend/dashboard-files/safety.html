@@ -118,6 +118,13 @@
               <span class="btn-text">I Need Help Now</span>
             </button>
             <p class="alert-hint">Your emergency contacts will receive your location immediately</p>
+
+            <div class="shake-detect-row" id="shake-detect-row">
+              <span class="shake-dot" id="shake-dot"></span>
+              <span id="shake-status-text">Shake detection: off</span>
+            </div>
+            <button class="btn-shake-toggle" id="enable-shake-btn">📳 Enable Shake-to-Alert</button>
+            <p class="alert-hint">Shake your phone forcefully to trigger an alert hands-free</p>
           </div>
 
           <div class="alert-status">
@@ -506,6 +513,82 @@
     el.hidden = false;
     document.getElementById('form-error').hidden = true;
   }
+
+  // ── Shake Detection ──────────────────────────────────────────────────────
+  const SHAKE_THRESHOLD = 15;   // m/s² magnitude — increase to reduce false positives
+  const SHAKE_COOLDOWN  = 3000; // ms minimum between shake triggers
+  let   shakeEnabled    = false;
+  let   lastShakeTime   = 0;
+
+  function onDeviceMotion(e) {
+    if (!shakeEnabled || alertInProgress) return;
+    const acc = e.accelerationIncludingGravity || e.acceleration;
+    if (!acc) return;
+    const mag = Math.sqrt(
+      Math.pow(acc.x || 0, 2) +
+      Math.pow(acc.y || 0, 2) +
+      Math.pow(acc.z || 0, 2)
+    );
+    const now = Date.now();
+    if (mag > SHAKE_THRESHOLD && (now - lastShakeTime) > SHAKE_COOLDOWN) {
+      lastShakeTime = now;
+      showAlertModal();
+    }
+  }
+
+  function startShakeDetection() {
+    window.addEventListener('devicemotion', onDeviceMotion);
+    shakeEnabled = true;
+    updateShakeUI(true);
+  }
+
+  function stopShakeDetection() {
+    window.removeEventListener('devicemotion', onDeviceMotion);
+    shakeEnabled = false;
+    updateShakeUI(false);
+  }
+
+  function updateShakeUI(active) {
+    const dot  = document.getElementById('shake-dot');
+    const text = document.getElementById('shake-status-text');
+    const btn  = document.getElementById('enable-shake-btn');
+    if (dot)  dot.classList.toggle('active', active);
+    if (text) text.textContent = active ? 'Shake detection: active' : 'Shake detection: off';
+    if (btn) {
+      btn.textContent = active ? '🔴 Disable Shake Detection' : '📳 Enable Shake-to-Alert';
+      btn.classList.toggle('enabled', active);
+    }
+  }
+
+  document.getElementById('enable-shake-btn').addEventListener('click', async () => {
+    if (shakeEnabled) {
+      stopShakeDetection();
+      return;
+    }
+
+    if (typeof DeviceMotionEvent === 'undefined') {
+      alert('Shake detection is not supported on this device or browser.');
+      return;
+    }
+
+    // iOS 13+ requires explicit permission triggered by a user gesture
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
+      try {
+        const state = await DeviceMotionEvent.requestPermission();
+        if (state === 'granted') {
+          startShakeDetection();
+        } else {
+          alert('Motion sensor permission was denied. On iPhone, go to Settings → Safari → Motion & Orientation Access and enable it, then try again.');
+        }
+      } catch (err) {
+        console.error('[Shake] Permission error:', err);
+        alert('Could not request motion sensor access. Please try again.');
+      }
+    } else {
+      // Android or desktop — no permission API needed
+      startShakeDetection();
+    }
+  });
 
   // ── Nav helpers ──────────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', async () => {
