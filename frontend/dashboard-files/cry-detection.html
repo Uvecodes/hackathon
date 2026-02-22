@@ -35,7 +35,7 @@
   <!-- Mobile menu -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="dashboard.html">Dashboard</a>
-    <a href="tracker.html">Baby Tracker</a>
+    <!-- <a href="tracker.html">Baby Tracker</a> -->
     <a href="community.html">Community</a>
     <a href="wellness.html">Wellness</a>
     <a href="safety.html">Safety</a>
@@ -58,9 +58,9 @@
         <a href="dashboard.html" class="sidebar-link">
           <span class="sl-icon">🏠</span> Dashboard
         </a>
-        <a href="tracker.html" class="sidebar-link">
+        <!-- <a href="tracker.html" class="sidebar-link">
           <span class="sl-icon">👶</span> Baby Tracker
-        </a>
+        </a> -->
         <a href="wellness.html" class="sidebar-link">
           <span class="sl-icon">🌿</span> Wellness
         </a>
@@ -347,6 +347,7 @@
       this.lastDetectionTime = 0;
       this.lastSpectral = null;
       this._cancelRecording = null;
+      this._lastAboveThreshold = 0; // tracks last time rms was above threshold
     }
 
     async init() {
@@ -369,12 +370,14 @@
     start() {
       if (this.isMonitoring || !this.analyser) return;
       this.isMonitoring = true;
-      this.monitor();
+      // Use setInterval instead of requestAnimationFrame so monitoring
+      // continues even when the browser tab is not in focus.
+      this.animationId = setInterval(() => this.monitor(), 100);
     }
 
     stop() {
       this.isMonitoring = false;
-      if (this.animationId) cancelAnimationFrame(this.animationId);
+      if (this.animationId) { clearInterval(this.animationId); this.animationId = null; }
       updateMonitorStatus('stopped');
     }
 
@@ -437,26 +440,30 @@
       const cooldownMs = 15000;
 
       if (rms > 0.02) {
+        this._lastAboveThreshold = now;
         if (!this.cryStartTime) {
           this.cryStartTime = now;
           updateMonitorStatus('detecting');
         }
         const duration = (now - this.cryStartTime) / 1000;
 
-        if (duration >= 2 && now - this.lastDetectionTime > cooldownMs) {
+        if (duration >= 1.5 && now - this.lastDetectionTime > cooldownMs) {
           this.lastDetectionTime = now;
           this.lastSpectral = this.getSpectralFeatures();
           this.detectCry(duration, rms);
           this.cryStartTime = null;
         }
       } else {
-        this.cryStartTime = null;
+        // Allow up to 600ms of quiet before resetting the cry timer.
+        // This prevents a brief audio dip from killing a legitimate detection.
+        if (this.cryStartTime && (now - this._lastAboveThreshold) > 600) {
+          this.cryStartTime = null;
+        }
         if (now - this.lastDetectionTime > cooldownMs) {
           updateMonitorStatus('monitoring');
         }
       }
 
-      this.animationId = requestAnimationFrame(() => this.monitor());
     }
 
     async detectCry(duration, rms) {
@@ -479,6 +486,7 @@
         loadHistory();
       } catch (err) {
         console.error('[Cry Detection]', err);
+        showError('Detection failed: ' + (err.message || 'Unknown error'));
       }
     }
 

@@ -34,10 +34,26 @@ const AUTH = {
   async getToken() {
     const auth = await _firebaseInitPromise;
     if (!auth) return null;
-    const user = auth.currentUser;
+
+    // auth.currentUser may be null briefly while Firebase restores a persisted
+    // session. Wait for the first onAuthStateChanged report (up to 2 s) before
+    // concluding that no user is signed in.
+    let user = auth.currentUser;
+    if (!user) {
+      user = await new Promise(resolve => {
+        let unsub;
+        const timer = setTimeout(() => { if (unsub) unsub(); resolve(null); }, 2000);
+        unsub = auth.onAuthStateChanged(u => {
+          clearTimeout(timer);
+          if (unsub) unsub();
+          resolve(u); // resolve immediately — null means signed out
+        });
+      });
+    }
+
     if (!user) return null;
     try {
-      return await user.getIdToken(false);
+      return await user.getIdToken(true); // force-refresh so token is never stale
     } catch (err) {
       console.error('[AUTH] getToken error:', err);
       return null;
@@ -61,6 +77,11 @@ const AUTH = {
     return auth ? !!auth.currentUser : false;
   },
 
+  /** Resolve a root-level page path regardless of current directory depth. */
+  _rootHref(page) {
+    return window.location.pathname.includes('/dashboard-files/') ? `../${page}` : page;
+  },
+
   /** Sign out, clear cache, redirect to home. */
   async logout() {
     const auth = this._auth();
@@ -68,13 +89,13 @@ const AUTH = {
       try { await auth.signOut(); } catch (err) { console.error('[AUTH] signOut error:', err); }
     }
     localStorage.removeItem(this.USER_KEY);
-    window.location.href = 'index.html';
+    window.location.href = this._rootHref('index.html');
   },
 
   /** Redirect to login if not authenticated. Call at top of protected pages. */
   requireAuth() {
     if (!this.isAuthenticated()) {
-      window.location.href = 'login.html';
+      window.location.href = this._rootHref('login.html');
     }
   },
 
@@ -118,7 +139,7 @@ const AUTH = {
       const response = await fetch(url, { ...options, headers, credentials: 'include' });
 
       if (response.status === 401) {
-        if (token) this.logout(); // token was sent but rejected → session invalid
+        this.logout(); // session invalid — redirect to login regardless
         throw new Error('Session expired. Please log in again.');
       }
 
@@ -352,13 +373,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!user) {
           setTimeout(() => {
             if (!firebase.auth().currentUser) {
-              window.location.href = 'login.html';
+              window.location.href = AUTH._rootHref('login.html');
             }
           }, 500);
         }
       });
     } else {
-      window.location.href = 'login.html';
+      window.location.href = AUTH._rootHref('login.html');
     }
   }
 

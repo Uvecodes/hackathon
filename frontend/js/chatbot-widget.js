@@ -1,6 +1,7 @@
 /* ============================================
-   THE MOTHER SUITE — Mama Assistant Widget
-   Bloom-adapted from blue-frontend chatbot-widget.js
+   THE MOTHER SUITE — Tasha AI Assistant Widget
+   Gemini-powered maternal health chatbot
+   Supports text + Web Speech API voice I/O
    Self-contained: injects its own CSS on load
    ============================================ */
 
@@ -12,11 +13,11 @@
     /* ── Widget shell ── */
     .chatbot-widget {
       position: fixed;
-      bottom: 2rem;
-      right: 2rem;
+      bottom: 1.5rem;
+      right: 1.5rem;
       z-index: 1200;
       font-family: 'Nunito', 'Nunito Sans', sans-serif;
-      max-width: 400px;
+      max-width: 340px;
       width: 100%;
     }
 
@@ -25,27 +26,33 @@
       position: absolute;
       bottom: 0;
       right: 0;
-      width: 56px;
-      height: 56px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
       background: linear-gradient(135deg, #C47B5A 0%, #b85c38 100%);
       color: #fff;
       border: none;
       cursor: pointer;
-      box-shadow: 0 4px 18px rgba(196,123,90,0.45);
+      box-shadow: 0 4px 20px rgba(196,123,90,0.50);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform 0.25s, box-shadow 0.25s;
+      animation: tasha-btn-breathe 3.5s ease-in-out infinite;
+    }
+    @keyframes tasha-btn-breathe {
+      0%,100% { box-shadow: 0 4px 20px rgba(196,123,90,0.50); }
+      50%      { box-shadow: 0 6px 30px rgba(196,123,90,0.70); }
     }
     .chatbot-toggle:hover {
       transform: scale(1.08);
-      box-shadow: 0 6px 24px rgba(196,123,90,0.6);
+      box-shadow: 0 6px 26px rgba(196,123,90,0.65);
     }
     .chatbot-toggle.active {
       transform: scale(0.88) rotate(45deg);
+      animation: none;
     }
-    .chatbot-toggle svg { width: 22px; height: 22px; }
+    .chatbot-toggle svg { width: 19px; height: 19px; }
 
     .unread-badge {
       position: absolute;
@@ -71,22 +78,22 @@
     /* ── Chat window ── */
     .chatbot-window {
       position: absolute;
-      bottom: 72px;
+      bottom: 62px;
       right: 0;
       width: 100%;
       background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.14);
       display: flex;
       flex-direction: column;
-      height: 480px;
+      height: 430px;
       animation: cb-slideUp 0.25s ease;
       overflow: hidden;
     }
     .chatbot-window.hidden { display: none; }
 
     @keyframes cb-slideUp {
-      from { opacity: 0; transform: translateY(16px); }
+      from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
@@ -95,7 +102,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.9rem 1.1rem;
+      padding: 0.65rem 0.9rem;
       background: linear-gradient(135deg, #C47B5A 0%, #b85c38 100%);
       color: #fff;
       flex-shrink: 0;
@@ -104,34 +111,62 @@
       display: flex;
       align-items: center;
       gap: 0.6rem;
+    }
+    .tasha-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .tasha-name-block {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .tasha-name-block strong {
+      font-size: 0.88rem;
       font-weight: 700;
-      font-size: 0.95rem;
       letter-spacing: 0.01em;
     }
-    .chatbot-title svg { width: 18px; height: 18px; }
-    .chatbot-close {
+    .tasha-name-block span {
+      font-size: 0.68rem;
+      opacity: 0.82;
+      font-weight: 400;
+    }
+    .chatbot-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .chatbot-hdr-btn {
       background: none;
       border: none;
       color: rgba(255,255,255,0.85);
       cursor: pointer;
-      padding: 4px;
+      padding: 5px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 6px;
-      transition: background 0.2s;
+      border-radius: 7px;
+      transition: background 0.18s, color 0.18s;
     }
-    .chatbot-close:hover { background: rgba(255,255,255,0.15); color: #fff; }
-    .chatbot-close svg { width: 18px; height: 18px; }
+    .chatbot-hdr-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
+    .chatbot-hdr-btn.active { background: rgba(255,255,255,0.25); color: #fff; }
+    .chatbot-hdr-btn svg { width: 15px; height: 15px; }
 
     /* ── Messages area ── */
     .chatbot-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 1rem;
+      padding: 0.75rem;
       display: flex;
       flex-direction: column;
-      gap: 0.7rem;
+      gap: 0.55rem;
       background: #fdf8f5;
       scrollbar-width: thin;
       scrollbar-color: #e8c8b8 transparent;
@@ -145,38 +180,48 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
       text-align: center;
-      padding: 1.25rem 0.75rem;
+      padding: 0.75rem 0.6rem;
       color: #8a6b5a;
     }
-    .chatbot-welcome svg { width: 40px; height: 40px; color: #C47B5A; opacity: 0.85; }
+    .tasha-welcome-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f5ddd0, #e8bba3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 3px 12px rgba(196,123,90,0.20);
+    }
     .chatbot-welcome h3 {
       margin: 0;
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       color: #3c2616;
       font-weight: 700;
     }
     .chatbot-welcome p {
       margin: 0;
-      font-size: 0.85rem;
-      line-height: 1.55;
+      font-size: 0.78rem;
+      line-height: 1.5;
       color: #7a5c4a;
     }
     .quick-suggestions {
       display: flex;
       flex-direction: column;
-      gap: 0.45rem;
+      gap: 0.35rem;
       width: 100%;
-      margin-top: 0.35rem;
+      margin-top: 0.2rem;
     }
     .suggestion-btn {
-      padding: 0.55rem 0.75rem;
+      padding: 0.42rem 0.7rem;
       background: #fff;
       border: 1.5px solid #f0d5c8;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.77rem;
       color: #5a3a28;
       font-family: inherit;
       transition: all 0.2s;
@@ -186,6 +231,7 @@
       border-color: #C47B5A;
       background: #fdf0eb;
       color: #C47B5A;
+      transform: translateX(3px);
     }
 
     /* ── Messages ── */
@@ -193,7 +239,7 @@
       display: flex;
       gap: 0.4rem;
       align-items: flex-end;
-      animation: cb-msgIn 0.25s ease;
+      animation: cb-msgIn 0.22s ease;
     }
     @keyframes cb-msgIn {
       from { opacity: 0; transform: translateY(8px); }
@@ -206,16 +252,17 @@
       display: flex;
       align-items: flex-end;
       gap: 0.4rem;
-      max-width: 78%;
+      max-width: 80%;
     }
     .chatbot-message-user .message-bubble { flex-direction: row-reverse; }
 
     .message-content {
-      padding: 0.65rem 0.9rem;
-      border-radius: 14px;
+      padding: 0.55rem 0.8rem;
+      border-radius: 12px;
       word-wrap: break-word;
       line-height: 1.45;
-      font-size: 0.875rem;
+      font-size: 0.835rem;
+      white-space: pre-wrap;
     }
     .chatbot-message-user .message-content {
       background: #C47B5A;
@@ -235,12 +282,29 @@
     }
 
     .message-time {
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       color: #c4a090;
       margin-bottom: 0.4rem;
       min-width: 36px;
       text-align: center;
     }
+
+    /* speak button on bot messages */
+    .msg-speak-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 3px 4px;
+      border-radius: 6px;
+      color: #c4a090;
+      display: flex;
+      align-items: center;
+      transition: color 0.18s, background 0.18s;
+      margin-bottom: 0.35rem;
+      flex-shrink: 0;
+    }
+    .msg-speak-btn:hover { color: #C47B5A; background: #fdf0eb; }
+    .msg-speak-btn svg { width: 13px; height: 13px; }
 
     /* Typing indicator */
     .chatbot-typing {
@@ -270,27 +334,27 @@
 
     /* ── Input area ── */
     .chatbot-input-area {
-      padding: 0.85rem 1rem;
+      padding: 0.6rem 0.75rem;
       background: #fff;
       border-top: 1px solid #f0d5c8;
       flex-shrink: 0;
     }
     .chatbot-form {
       display: flex;
-      gap: 0.45rem;
+      gap: 0.35rem;
       align-items: center;
     }
     .chatbot-input {
       flex: 1;
-      padding: 0.65rem 0.9rem;
+      padding: 0.55rem 0.8rem;
       border: 1.5px solid #f0d5c8;
-      border-radius: 10px;
-      font-size: 0.875rem;
+      border-radius: 9px;
+      font-size: 0.835rem;
       font-family: inherit;
       color: #3c2616;
       background: #fdf8f5;
       transition: border-color 0.2s, box-shadow 0.2s;
-      min-height: 40px;
+      min-height: 36px;
       outline: none;
     }
     .chatbot-input:focus {
@@ -298,11 +362,44 @@
       box-shadow: 0 0 0 3px rgba(196,123,90,0.12);
     }
     .chatbot-input::placeholder { color: #c4a090; }
+    .chatbot-input.recording {
+      border-color: #e04444;
+      box-shadow: 0 0 0 3px rgba(224,68,68,0.12);
+      animation: recording-pulse 1.2s ease-in-out infinite;
+    }
+    @keyframes recording-pulse {
+      0%,100% { box-shadow: 0 0 0 3px rgba(224,68,68,0.12); }
+      50%      { box-shadow: 0 0 0 5px rgba(224,68,68,0.22); }
+    }
+
+    .chatbot-icon-btn {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid #f0d5c8;
+      background: #fdf8f5;
+      color: #b08070;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s;
+      flex-shrink: 0;
+    }
+    .chatbot-icon-btn:hover { border-color: #C47B5A; color: #C47B5A; background: #fdf0eb; }
+    .chatbot-icon-btn.recording {
+      border-color: #e04444;
+      background: #fee2e2;
+      color: #e04444;
+      animation: cb-pulse 1.2s infinite;
+    }
+    .chatbot-icon-btn svg { width: 15px; height: 15px; }
+
     .chatbot-send-btn {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       border: none;
-      background: #C47B5A;
+      background: linear-gradient(135deg, #C47B5A 0%, #b85c38 100%);
       color: #fff;
       border-radius: 10px;
       cursor: pointer;
@@ -311,91 +408,200 @@
       justify-content: center;
       transition: opacity 0.2s, transform 0.15s;
       flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(196,123,90,0.30);
     }
     .chatbot-send-btn:hover  { opacity: 0.88; transform: scale(1.06); }
     .chatbot-send-btn:active { transform: scale(0.94); }
-    .chatbot-send-btn svg { width: 17px; height: 17px; }
+    .chatbot-send-btn svg { width: 15px; height: 15px; }
+
+    /* voice permission hint */
+    .voice-hint {
+      font-size: 0.72rem;
+      color: #b08070;
+      text-align: center;
+      margin-top: 0.35rem;
+      line-height: 1.4;
+      min-height: 1em;
+    }
 
     /* ── Responsive ── */
     @media (max-width: 480px) {
-      .chatbot-widget { bottom: 1rem; right: 1rem; max-width: calc(100vw - 2rem); }
-      .chatbot-window { height: 380px; border-radius: 14px; }
-      .message-bubble { max-width: 87%; }
+      .chatbot-widget { bottom: 0.75rem; right: 0.75rem; max-width: calc(100vw - 1.5rem); }
+      .chatbot-window { height: 360px; border-radius: 14px; }
+      .message-bubble { max-width: 88%; }
     }
   `;
   document.head.appendChild(style);
 })();
 
 
-// ── ChatbotWidget class ────────────────────────────────────────────────────────
-class ChatbotWidget {
+// ── TashaWidget class ─────────────────────────────────────────────────────────
+class TashaWidget {
   constructor(options = {}) {
-    this.isOpen = false;
-    this.messages = [];
-    this.containerSelector = options.containerSelector || 'body';
-    this.apiBase = options.apiBase || '/api';
-    this.maxMessages = options.maxMessages || 50;
-    this._init();
-  }
+    this.isOpen        = false;
+    this.apiBase       = options.apiBase || '/api';
+    this.maxMessages   = options.maxMessages || 60;
+    this.ttsEnabled    = true;   // text-to-speech on by default
+    this.isRecording   = false;
+    this._recognition  = null;
+    this._utterance    = null;
+    this._convHistory  = [];     // [{role:'user'|'model', parts:[{text}]}] sent to backend
 
-  _init() {
+    this._initSpeech();
     this._createHTML();
     this._bindEvents();
     this._loadHistory();
   }
 
+  // ── Speech setup ────────────────────────────────────────────────────────────
+
+  _initSpeech() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SR) {
+      this._recognition = new SR();
+      this._recognition.lang        = 'en-US';
+      this._recognition.interimResults = false;
+      this._recognition.maxAlternatives = 1;
+
+      this._recognition.onresult = e => {
+        const transcript = e.results[0][0].transcript.trim();
+        if (transcript) {
+          document.getElementById('tasha-input').value = transcript;
+          this._stopRecording();
+          this._sendMessage(transcript);
+        }
+      };
+      this._recognition.onerror = () => this._stopRecording();
+      this._recognition.onend   = () => this._stopRecording();
+    }
+  }
+
+  _startRecording() {
+    if (!this._recognition) {
+      this._setVoiceHint('Voice input is not supported in this browser.');
+      return;
+    }
+    this.isRecording = true;
+    document.getElementById('tasha-mic-btn').classList.add('recording');
+    document.getElementById('tasha-input').classList.add('recording');
+    document.getElementById('tasha-input').placeholder = 'Listening…';
+    this._setVoiceHint('Listening — speak now');
+    try { this._recognition.start(); } catch { this._stopRecording(); }
+  }
+
+  _stopRecording() {
+    if (!this.isRecording) return;
+    this.isRecording = false;
+    const micBtn = document.getElementById('tasha-mic-btn');
+    const input  = document.getElementById('tasha-input');
+    if (micBtn) micBtn.classList.remove('recording');
+    if (input)  {
+      input.classList.remove('recording');
+      input.placeholder = 'Ask Tasha something…';
+    }
+    this._setVoiceHint('');
+    try { this._recognition.stop(); } catch { /* ignore */ }
+  }
+
+  _speak(text) {
+    if (!this.ttsEnabled || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    // Strip markdown-style bold markers for cleaner speech
+    const clean = text.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1');
+    const utt = new SpeechSynthesisUtterance(clean);
+    utt.lang = 'en-US';
+    utt.rate = 0.97;
+    utt.pitch = 1.05;
+    // Prefer a female voice if available
+    const voices = window.speechSynthesis.getVoices();
+    const female = voices.find(v => /female|woman|zira|samantha|karen|moira|tessa|fiona/i.test(v.name));
+    if (female) utt.voice = female;
+    this._utterance = utt;
+    window.speechSynthesis.speak(utt);
+  }
+
+  _setVoiceHint(msg) {
+    const el = document.getElementById('tasha-voice-hint');
+    if (el) el.textContent = msg;
+  }
+
+  // ── HTML ─────────────────────────────────────────────────────────────────────
+
   _createHTML() {
-    const container = document.querySelector(this.containerSelector);
-    container.insertAdjacentHTML('beforeend', `
-      <div id="chatbot-widget" class="chatbot-widget">
-        <!-- Toggle -->
-        <button id="chatbot-toggle" class="chatbot-toggle" title="Chat with Mama Assistant" aria-label="Open Mama Assistant">
+    const micSupported = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+    const ttsSupported = !!window.speechSynthesis;
+
+    document.body.insertAdjacentHTML('beforeend', `
+      <div id="tasha-widget" class="chatbot-widget">
+
+        <!-- Toggle button -->
+        <button id="tasha-toggle" class="chatbot-toggle" title="Chat with Tasha" aria-label="Open Tasha">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <path d="M12 2a7 7 0 0 1 7 7c0 3.5-2.5 6.4-6 7.6V19a1 1 0 0 1-1 1h-0a1 1 0 0 1-1-1v-2.4C7.5 15.4 5 12.5 5 9a7 7 0 0 1 7-7z"/>
+            <circle cx="12" cy="22" r="0.5" fill="currentColor"/>
           </svg>
-          <span class="unread-badge" id="unread-badge" style="display:none;">1</span>
+          <span class="unread-badge" id="tasha-unread" style="display:none;">1</span>
         </button>
 
-        <!-- Window -->
-        <div id="chatbot-window" class="chatbot-window hidden" role="dialog" aria-label="Mama Assistant">
+        <!-- Chat window -->
+        <div id="tasha-window" class="chatbot-window hidden" role="dialog" aria-label="Tasha — Maternal Health Assistant">
+
+          <!-- Header -->
           <div class="chatbot-header">
             <div class="chatbot-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="10"/>
-                <circle cx="12" cy="10" r="3"/>
-                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
-              </svg>
-              <span>Mama Assistant</span>
+              <div class="tasha-avatar">🌸</div>
+              <div class="tasha-name-block">
+                <strong>Tasha</strong>
+                <span>Maternal Health Assistant</span>
+              </div>
             </div>
-            <button id="chatbot-close" class="chatbot-close" aria-label="Close chat">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-              </svg>
-            </button>
+            <div class="chatbot-header-actions">
+              ${ttsSupported ? `
+              <button id="tasha-tts-toggle" class="chatbot-hdr-btn active" title="Toggle voice responses" aria-label="Toggle text-to-speech">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                </svg>
+              </button>` : ''}
+              <button id="tasha-close" class="chatbot-hdr-btn" aria-label="Close chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
           </div>
 
-          <div id="chatbot-messages" class="chatbot-messages">
+          <!-- Messages -->
+          <div id="tasha-messages" class="chatbot-messages">
             <div class="chatbot-welcome">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <circle cx="12" cy="12" r="10"/>
-                <circle cx="12" cy="10" r="3"/>
-                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
-              </svg>
-              <h3>Hi, I'm your Mama Assistant 🌸</h3>
-              <p>Ask me anything about wellness, nutrition, exercises, or baby care.</p>
+              <div class="tasha-welcome-avatar">🌸</div>
+              <h3>Hi, I'm Tasha!</h3>
+              <p>Your personal maternal health companion. Ask me anything about prenatal care, postpartum recovery, baby care, nutrition, or exercise.</p>
               <div class="quick-suggestions">
-                <button class="suggestion-btn" data-message="What nutrition tips are recommended for my stage?">Nutrition Tips</button>
-                <button class="suggestion-btn" data-message="What exercises are safe during pregnancy?">Safe Exercises</button>
-                <button class="suggestion-btn" data-message="How can I improve my sleep quality?">Better Sleep</button>
+                <button class="suggestion-btn" data-message="What should I eat during my first trimester?">🥗 First trimester nutrition</button>
+                <button class="suggestion-btn" data-message="What exercises are safe during pregnancy?">🤸 Safe pregnancy exercises</button>
+                <button class="suggestion-btn" data-message="How can I manage postpartum anxiety?">💛 Postpartum wellbeing</button>
+                <button class="suggestion-btn" data-message="My baby won't stop crying. What could it mean?">👶 Baby care help</button>
               </div>
             </div>
           </div>
 
+          <!-- Input area -->
           <div class="chatbot-input-area">
-            <form id="chatbot-form" class="chatbot-form">
-              <input type="text" id="chatbot-input" class="chatbot-input"
-                placeholder="Ask me something…" autocomplete="off" maxlength="500"/>
+            <form id="tasha-form" class="chatbot-form">
+              <input type="text" id="tasha-input" class="chatbot-input"
+                placeholder="Ask Tasha something…" autocomplete="off" maxlength="800"/>
+              ${micSupported ? `
+              <button type="button" id="tasha-mic-btn" class="chatbot-icon-btn" title="Voice input" aria-label="Start voice input">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="2" width="6" height="11" rx="3"/>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                  <line x1="12" y1="19" x2="12" y2="23"/>
+                  <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+              </button>` : ''}
               <button type="submit" class="chatbot-send-btn" aria-label="Send message">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="22" y1="2" x2="11" y2="13"/>
@@ -403,19 +609,22 @@ class ChatbotWidget {
                 </svg>
               </button>
             </form>
+            <div id="tasha-voice-hint" class="voice-hint"></div>
           </div>
         </div>
       </div>
     `);
   }
 
-  _bindEvents() {
-    document.getElementById('chatbot-toggle').addEventListener('click', () => this._toggle());
-    document.getElementById('chatbot-close').addEventListener('click', () => this._close());
+  // ── Events ───────────────────────────────────────────────────────────────────
 
-    document.getElementById('chatbot-form').addEventListener('submit', e => {
+  _bindEvents() {
+    document.getElementById('tasha-toggle').addEventListener('click', () => this._toggle());
+    document.getElementById('tasha-close').addEventListener('click', () => this._close());
+
+    document.getElementById('tasha-form').addEventListener('submit', e => {
       e.preventDefault();
-      const input = document.getElementById('chatbot-input');
+      const input = document.getElementById('tasha-input');
       const msg = input.value.trim();
       if (!msg) return;
       input.value = '';
@@ -426,41 +635,96 @@ class ChatbotWidget {
       btn.addEventListener('click', () => this._sendMessage(btn.dataset.message));
     });
 
+    const ttsBtn = document.getElementById('tasha-tts-toggle');
+    if (ttsBtn) {
+      ttsBtn.addEventListener('click', () => {
+        this.ttsEnabled = !this.ttsEnabled;
+        ttsBtn.classList.toggle('active', this.ttsEnabled);
+        ttsBtn.title = this.ttsEnabled ? 'Voice responses ON' : 'Voice responses OFF';
+        ttsBtn.innerHTML = this.ttsEnabled
+          ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+               <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+               <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+             </svg>`
+          : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+               <line x1="23" y1="9" x2="17" y2="15"/>
+               <line x1="17" y1="9" x2="23" y2="15"/>
+             </svg>`;
+        if (!this.ttsEnabled && window.speechSynthesis) window.speechSynthesis.cancel();
+      });
+    }
+
+    const micBtn = document.getElementById('tasha-mic-btn');
+    if (micBtn) {
+      micBtn.addEventListener('click', () => {
+        if (this.isRecording) this._stopRecording();
+        else this._startRecording();
+      });
+    }
+
     // Close on outside click
     document.addEventListener('click', e => {
-      const widget = document.getElementById('chatbot-widget');
+      const widget = document.getElementById('tasha-widget');
       if (widget && !widget.contains(e.target) && this.isOpen) this._close();
     });
+
+    // Cancel TTS when widget closes
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && window.speechSynthesis) window.speechSynthesis.cancel();
+    });
   }
+
+  // ── Open / Close ─────────────────────────────────────────────────────────────
 
   _toggle() { this.isOpen ? this._close() : this._open(); }
 
   _open() {
     this.isOpen = true;
-    document.getElementById('chatbot-window').classList.remove('hidden');
-    document.getElementById('chatbot-toggle').classList.add('active');
-    document.getElementById('chatbot-input').focus();
-    document.getElementById('unread-badge').style.display = 'none';
+    document.getElementById('tasha-window').classList.remove('hidden');
+    document.getElementById('tasha-toggle').classList.add('active');
+    document.getElementById('tasha-input').focus();
+    document.getElementById('tasha-unread').style.display = 'none';
   }
 
   _close() {
     this.isOpen = false;
-    document.getElementById('chatbot-window').classList.add('hidden');
-    document.getElementById('chatbot-toggle').classList.remove('active');
+    document.getElementById('tasha-window').classList.add('hidden');
+    document.getElementById('tasha-toggle').classList.remove('active');
+    this._stopRecording();
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
   }
 
+  // ── Send message ─────────────────────────────────────────────────────────────
+
   async _sendMessage(message) {
-    // Remove welcome screen
     const welcome = document.querySelector('.chatbot-welcome');
     if (welcome) welcome.remove();
 
     this._addMsg(message, 'user');
     const typing = this._showTyping();
 
+    // Build last-N history for context (Gemini format)
+    const historyForApi = this._convHistory.slice(-10);
+
     try {
-      const data = await AUTH.post(`${this.apiBase}/chatbot/message`, { message });
+      const data = await AUTH.post(`${this.apiBase}/chatbot/message`, {
+        message,
+        history: historyForApi,
+      });
       typing.remove();
-      this._addMsg(data.response || 'I couldn't get a response. Please try again.', 'bot');
+
+      const reply = data.response || "I'm sorry, I couldn't get a response. Please try again.";
+      this._addMsg(reply, 'bot');
+      this._speak(reply);
+
+      // Append to local conversation history
+      this._convHistory.push({ role: 'user',  parts: [{ text: message }] });
+      this._convHistory.push({ role: 'model', parts: [{ text: reply }] });
+      // Keep history bounded
+      if (this._convHistory.length > 30) this._convHistory = this._convHistory.slice(-30);
+
     } catch (err) {
       typing.remove();
       this._addMsg('Sorry, something went wrong. Please try again.', 'bot', true);
@@ -469,16 +733,34 @@ class ChatbotWidget {
     this._scrollBottom();
   }
 
+  // ── Render messages ──────────────────────────────────────────────────────────
+
   _addMsg(content, sender, isError = false) {
-    const container = document.getElementById('chatbot-messages');
+    const container = document.getElementById('tasha-messages');
     const el = document.createElement('div');
     el.className = `chatbot-message chatbot-message-${sender}${isError ? ' error' : ''}`;
+
+    const speakBtn = (sender === 'bot' && !isError && window.speechSynthesis)
+      ? `<button class="msg-speak-btn" title="Read aloud" aria-label="Read aloud">
+           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+           </svg>
+         </button>`
+      : '';
+
     el.innerHTML = `
       <div class="message-bubble">
         <div class="message-content">${this._escape(content)}</div>
+        ${speakBtn}
       </div>
       <span class="message-time">${this._time()}</span>
     `;
+
+    // Bind per-message speak button
+    const btn = el.querySelector('.msg-speak-btn');
+    if (btn) btn.addEventListener('click', () => this._speak(content));
+
     container.appendChild(el);
 
     // Trim old messages
@@ -487,7 +769,7 @@ class ChatbotWidget {
   }
 
   _showTyping() {
-    const container = document.getElementById('chatbot-messages');
+    const container = document.getElementById('tasha-messages');
     const el = document.createElement('div');
     el.className = 'chatbot-message chatbot-message-bot';
     el.innerHTML = `
@@ -501,14 +783,18 @@ class ChatbotWidget {
     return el;
   }
 
+  // ── History ──────────────────────────────────────────────────────────────────
+
   async _loadHistory() {
     if (!AUTH.isAuthenticated()) return;
     try {
-      const data = await AUTH.get(`${this.apiBase}/chatbot/history`);
-      const history = (data.history || []).slice(-5);
+      const data = await AUTH.get(`${this.apiBase}/chatbot/history?limit=6`);
+      const history = (data.history || []).slice(-6);
       history.forEach(msg => {
         this._addMsg(msg.userMessage, 'user');
         this._addMsg(msg.botResponse, 'bot');
+        this._convHistory.push({ role: 'user',  parts: [{ text: msg.userMessage }] });
+        this._convHistory.push({ role: 'model', parts: [{ text: msg.botResponse }] });
       });
       if (history.length > 0) {
         const welcome = document.querySelector('.chatbot-welcome');
@@ -518,8 +804,10 @@ class ChatbotWidget {
     } catch { /* non-fatal */ }
   }
 
+  // ── Utilities ────────────────────────────────────────────────────────────────
+
   _scrollBottom() {
-    const c = document.getElementById('chatbot-messages');
+    const c = document.getElementById('tasha-messages');
     if (c) setTimeout(() => { c.scrollTop = c.scrollHeight; }, 80);
   }
 
@@ -534,22 +822,23 @@ class ChatbotWidget {
   }
 
   showUnread() {
-    if (!this.isOpen) document.getElementById('unread-badge').style.display = 'flex';
+    if (!this.isOpen) document.getElementById('tasha-unread').style.display = 'flex';
   }
 }
 
 // ── Auto-init after auth is ready ─────────────────────────────────────────────
-(async function initChatbot() {
+(async function initTasha() {
   if (typeof AUTH === 'undefined') {
-    // AUTH not yet defined — wait for DOMContentLoaded then retry
-    document.addEventListener('DOMContentLoaded', initChatbot);
+    document.addEventListener('DOMContentLoaded', initTasha);
     return;
   }
 
   try {
     const user = await AUTH.whenReady();
     if (user) {
-      window.chatbotWidget = new ChatbotWidget();
+      window.tashaWidget = new TashaWidget();
+      // Expose legacy alias so any existing code using chatbotWidget still works
+      window.chatbotWidget = window.tashaWidget;
     }
   } catch { /* non-fatal */ }
 })();

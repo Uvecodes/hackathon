@@ -90,8 +90,11 @@ body {
 .pwa-update-btn:hover { background: #c7785f; }
 .pwa-dismiss-btn {
   background: none; border: none; color: rgba(253,248,243,0.6);
-  font-size: 1rem; cursor: pointer; padding: 0 0.2rem;
+  font-size: 1rem; cursor: pointer; padding: 0.4rem 0.5rem;
   transition: color 0.2s; line-height: 1;
+  min-width: 2rem; min-height: 2rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 .pwa-dismiss-btn:hover { color: var(--cream); }
 

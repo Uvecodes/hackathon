@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value);
     return {
       email:                emailEl?.value.trim() || '',
-      fullName:             nameEl?.value.trim()  || '',
+      name:                 nameEl?.value.trim()  || '',
       pregnancyStage:       stageEl?.value        || '',
       dueDate:              document.getElementById('dueDate')?.value              || null,
       age:                  document.getElementById('age')?.value                  || null,

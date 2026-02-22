@@ -72,7 +72,9 @@ const PWA = {
 
   async promptInstall() {
     if (!this._installPrompt) {
-      console.warn('[PWA] No install prompt available.');
+      if (location.protocol === 'https:') {
+        console.warn('[PWA] No install prompt available.');
+      }
       return;
     }
     this._installPrompt.prompt();
