@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Mother Suite — My Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Nunito:wght@300;400;500;600;700&family=Nunito+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- Subtle bg blobs -->
+  <div class="blob-bg">
+    <div class="blob blob-1" style="opacity:0.15;"></div>
+    <div class="blob blob-2" style="opacity:0.12;"></div>
+  </div>
+
+  <!-- ── NAV (minimal — user is logged in) ── -->
+  <nav>
+    <a href="dashboard.html" class="nav-logo">The Mother Suite</a>
+    <ul class="nav-links">
+      <li><a href="community.html">Community</a></li>
+      <li><a href="index.html#about">About</a></li>
+    </ul>
+    <!-- User avatar + logout in nav on desktop -->
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <div style="font-size:0.82rem;color:var(--text-soft);font-family:var(--font-sub);">Hi, <strong style="color:var(--text-dark);">Jane</strong> 👋</div>
+      <button id="logoutBtn" style="
+        background:none;border:1.5px solid rgba(180,120,90,0.25);
+        border-radius:var(--radius-pill);padding:0.45rem 1rem;
+        font-family:var(--font-sub);font-size:0.78rem;font-weight:600;
+        color:var(--text-mid);transition:all 0.2s;
+      ">Log out</button>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="community.html">Community</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html">← Back to Home</a>
+  </div>
+
+  <!-- ── DASHBOARD LAYOUT ── -->
+  <div class="dashboard-page">
+
+    <!-- ══ SIDEBAR (navigation — isolated from content) ══ -->
+    <aside class="sidebar">
+
+      <!-- User greeting — text element isolated in its own block -->
+      <div class="sidebar-greeting">
+        <div class="greet-label">Logged in as</div>
+        <div class="greet-name">Jane</div>
+        <div class="greet-sub">mama · week 14 🌱</div>
+      </div>
+
+      <!-- Sidebar navigation links -->
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">My Journey</div>
+        <a href="dashboard.html" class="sidebar-link active">
+          <span class="sl-icon">🏠</span> Dashboard
+        </a>
+        <a href="#" class="sidebar-link">
+          <span class="sl-icon">🤰</span> Pregnancy
+        </a>
+        <a href="#" class="sidebar-link">
+          <span class="sl-icon">👶</span> Baby Tracker
+        </a>
+        <a href="#" class="sidebar-link">
+          <span class="sl-icon">😴</span> Sleep Log
+        </a>
+        <a href="#" class="sidebar-link">
+          <span class="sl-icon">🍼</span> Feed Log
+        </a>
+
+        <div class="sidebar-section-label">Wellness</div>
+        <a href="#" class="sidebar-link">
+          <span class="sl-icon">🏃‍♀️</span> Fitness
+        </a>
+        <a href="#" class="sidebar-link">
+          <span class="sl-icon">🍽️</span> Nutrition
+        </a>
+        <a href="#" class="sidebar-link">
+          <span class="sl-icon">💭</span> Mood Journal
+        </a>
+
+        <div class="sidebar-section-label">Features</div>
+        <a href="#" class="sidebar-link">
+          <span class="sl-icon">🔊</span> Cry Detector
+          <span style="font-size:0.6rem;background:rgba(212,197,226,0.5);color:#8868a8;border-radius:6px;padding:0.1rem 0.4rem;margin-left:auto;font-weight:700;">SOON</span>
+        </a>
+        <a href="community.html" class="sidebar-link">
+          <span class="sl-icon">💬</span> Community
+        </a>
+      </nav>
+
+      <!-- Bottom user block -->
+      <div class="sidebar-bottom">
+        <div class="sidebar-user">
+          <div class="sidebar-avatar">👩</div>
+          <div>
+            <div class="sidebar-user-name">Jane Smith</div>
+            <div class="sidebar-user-email">jane@example.com</div>
+          </div>
+        </div>
+        <button class="sidebar-logout" id="logoutBtn">
+          <span>↩</span> Log out
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- ══ MAIN CONTENT (isolated from sidebar) ══ -->
+    <main class="dash-main">
+
+      <!-- Top bar — TEXT isolated -->
+      <div class="dash-topbar">
+        <h1>Good morning, <em>Jane.</em></h1>
+        <div class="dash-date" id="dashDate">Loading…</div>
+      </div>
+
+      <!-- ── STANDIN BANNER — text and decorative elements separated ── -->
+      <div class="standin-banner">
+        <!-- Text block -->
+        <div class="standin-text">
+          <h2>Welcome to your <em>Suite.</em></h2>
+          <p>This is your personal dashboard — a home for everything pregnancy, postpartum, and baby. Features are being built out now. Here's a preview of what's coming.</p>
+          <span class="standin-pill">✦ Product Standin — In Development</span>
+        </div>
+        <!-- The ::before pseudo-element handles the decorative emoji (no extra div needed) -->
+      </div>
+
+      <!-- ── STAT CARDS — each card is a self-contained unit ── -->
+      <div class="dash-stats">
+
+        <!-- Card: week -->
+        <div class="dash-stat-card">
+          <span class="dsc-icon">🤰</span>
+          <div class="dsc-value">14</div>
+          <div class="dsc-label">Weeks pregnant</div>
+          <span class="dsc-badge positive">2nd Trimester</span>
+        </div>
+
+        <!-- Card: sleep -->
+        <div class="dash-stat-card">
+          <span class="dsc-icon">😴</span>
+          <div class="dsc-value">7h 20m</div>
+          <div class="dsc-label">Last night's sleep</div>
+          <span class="dsc-badge positive">+42 min</span>
+        </div>
+
+        <!-- Card: next appointment -->
+        <div class="dash-stat-card">
+          <span class="dsc-icon">📅</span>
+          <div class="dsc-value">Mar 3</div>
+          <div class="dsc-label">Next OB appointment</div>
+          <span class="dsc-badge neutral">9 days</span>
+        </div>
+
+        <!-- Card: mood -->
+        <div class="dash-stat-card">
+          <span class="dsc-icon">💛</span>
+          <div class="dsc-value">Good</div>
+          <div class="dsc-label">Today's mood check-in</div>
+          <span class="dsc-badge positive">Logged</span>
+        </div>
+
+      </div>
+
+      <!-- ── CONTENT GRID — two-column layout ── -->
+      <div class="dash-grid">
+
+        <!-- Card: Activity feed — TEXT only, no image -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Recent Activity</div>
+            <a href="#" class="dash-card-action">View all →</a>
+          </div>
+          <div class="placeholder-rows">
+            <div class="placeholder-row">
+              <span class="pr-icon">🍼</span>
+              <div class="pr-text">
+                <div class="pr-label">Feed logged</div>
+                <div class="pr-sub">5 oz · left side · 18 min</div>
+              </div>
+              <span class="pr-time">2h ago</span>
+            </div>
+            <div class="placeholder-row">
+              <span class="pr-icon">😴</span>
+              <div class="pr-text">
+                <div class="pr-label">Sleep session ended</div>
+                <div class="pr-sub">7h 20m · 10:45 PM – 6:05 AM</div>
+              </div>
+              <span class="pr-time">6h ago</span>
+            </div>
+            <div class="placeholder-row">
+              <span class="pr-icon">💭</span>
+              <div class="pr-text">
+                <div class="pr-label">Mood journal entry</div>
+                <div class="pr-sub">Feeling good, a little tired</div>
+              </div>
+              <span class="pr-time">Yesterday</span>
+            </div>
+            <div class="placeholder-row">
+              <span class="pr-icon">🏃‍♀️</span>
+              <div class="pr-text">
+                <div class="pr-label">Workout completed</div>
+                <div class="pr-sub">Prenatal yoga · 25 min</div>
+              </div>
+              <span class="pr-time">Yesterday</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Sleep chart — VISUAL only (no text mixed in) -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Sleep This Week</div>
+            <a href="#" class="dash-card-action">Details →</a>
+          </div>
+          <!-- Chart visual — isolated from text labels below -->
+          <div class="placeholder-chart">
+            <div class="pc-bar" style="height:60%"></div>
+            <div class="pc-bar" style="height:80%"></div>
+            <div class="pc-bar" style="height:55%"></div>
+            <div class="pc-bar" style="height:90%"></div>
+            <div class="pc-bar highlight" style="height:75%"></div>
+            <div class="pc-bar" style="height:85%"></div>
+            <div class="pc-bar" style="height:72%"></div>
+          </div>
+          <!-- Labels — isolated text row below chart -->
+          <div class="pc-labels">
+            <span class="pc-label">Mon</span>
+            <span class="pc-label">Tue</span>
+            <span class="pc-label">Wed</span>
+            <span class="pc-label">Thu</span>
+            <span class="pc-label">Fri</span>
+            <span class="pc-label">Sat</span>
+            <span class="pc-label">Sun</span>
+          </div>
+        </div>
+
+        <!-- Card: Milestones — TEXT only -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Upcoming Milestones</div>
+            <a href="#" class="dash-card-action">All →</a>
+          </div>
+          <div class="milestone-list">
+            <div class="milestone-item">
+              <div class="mi-dot done"></div>
+              <div class="mi-text">First heartbeat heard</div>
+              <div class="mi-week">Week 10</div>
+            </div>
+            <div class="milestone-item">
+              <div class="mi-dot done"></div>
+              <div class="mi-text">Nuchal translucency scan</div>
+              <div class="mi-week">Week 12</div>
+            </div>
+            <div class="milestone-item">
+              <div class="mi-dot pending"></div>
+              <div class="mi-text pending">Anatomy scan</div>
+              <div class="mi-week">Week 20</div>
+            </div>
+            <div class="milestone-item">
+              <div class="mi-dot pending"></div>
+              <div class="mi-text pending">Glucose tolerance test</div>
+              <div class="mi-week">Week 24–28</div>
+            </div>
+            <div class="milestone-item">
+              <div class="mi-dot pending"></div>
+              <div class="mi-text pending">3rd trimester begins</div>
+              <div class="mi-week">Week 28</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Cry Detector coming soon — mostly visual/text separated -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <div class="dash-card-title">Cry Detector</div>
+            <span style="font-size:0.65rem;font-weight:700;color:#8868a8;background:rgba(212,197,226,0.4);padding:0.25rem 0.7rem;border-radius:var(--radius-pill);font-family:var(--font-sub);">Coming Soon</span>
+          </div>
+          <!-- Visual block — isolated -->
+          <div style="
+            background: linear-gradient(145deg, #fde8dc, #ecdff5);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+          ">
+            <div style="font-size:2.5rem;margin-bottom:0.5rem;animation:cryBounce 2.5s ease-in-out infinite;">👶</div>
+            <!-- Sound wave visual (no text) -->
+            <div style="display:flex;gap:3px;align-items:flex-end;height:24px;justify-content:center;">
+              <div style="width:3px;border-radius:3px;background:var(--blush-mid);height:40%;animation:swAnim 0.8s ease-in-out infinite alternate;"></div>
+              <div style="width:3px;border-radius:3px;background:var(--blush-mid);height:75%;animation:swAnim 0.8s ease-in-out infinite alternate;animation-delay:0.1s"></div>
+              <div style="width:3px;border-radius:3px;background:var(--blush-mid);height:100%;animation:swAnim 0.8s ease-in-out infinite alternate;animation-delay:0.2s"></div>
+              <div style="width:3px;border-radius:3px;background:var(--blush-mid);height:65%;animation:swAnim 0.8s ease-in-out infinite alternate;animation-delay:0.15s"></div>
+              <div style="width:3px;border-radius:3px;background:var(--blush-mid);height:90%;animation:swAnim 0.8s ease-in-out infinite alternate;animation-delay:0.05s"></div>
+            </div>
+          </div>
+          <!-- Text block — isolated below visual -->
+          <p style="font-size:0.82rem;color:var(--text-mid);line-height:1.65;text-align:center;">
+            Audio-based cry detection is on the way. It will identify hunger, pain, tiredness, and more — logging every detection so insights get smarter over time.
+          </p>
+        </div>
+
+      </div>
+      <!-- end dash-grid -->
+
+    </main>
+    <!-- end dash-main -->
+
+  </div>
+  <!-- end dashboard-page -->
+
+  <style>
+    @keyframes cryBounce { 0%,100%{transform:scale(1) rotate(-3deg)} 50%{transform:scale(1.08) rotate(3deg)} }
+    @keyframes swAnim { to { transform: scaleY(0.2); } }
+  </style>
+
+  <script src="js/shared.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
