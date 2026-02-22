@@ -9,9 +9,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const ring   = document.getElementById('cursor-ring');
 
   if (cursor && ring && window.matchMedia('(pointer: fine)').matches) {
+    // Initialize cursor position
+    cursor.style.left = '0px';
+    cursor.style.top = '0px';
+    ring.style.left = '0px';
+    ring.style.top = '0px';
+    
     document.addEventListener('mousemove', e => {
-      cursor.style.left = ring.style.left = e.clientX + 'px';
-      cursor.style.top  = ring.style.top  = e.clientY + 'px';
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      ring.style.left   = e.clientX + 'px';
+      ring.style.top    = e.clientY + 'px';
     });
     document.querySelectorAll('a, button, input, textarea, label').forEach(el => {
       el.addEventListener('mouseenter', () => {
