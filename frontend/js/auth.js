@@ -21,8 +21,8 @@ const AUTH = {
   USER_KEY: 'ms_user',
 
   API_BASE_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:3000'
-    : 'https://hackathon-hai8.onrender.com',
+    ? 'https://the-mother-suite.netlify.app/'
+    : 'https://hackathon-bb41.onrender.com',
 
   _auth() {
     return (typeof firebase !== 'undefined' && window.firebaseInitialized)
