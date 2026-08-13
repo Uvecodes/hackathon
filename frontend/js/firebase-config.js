@@ -4,8 +4,8 @@
  * (values are stored in the backend .env, never exposed in source).
  */
 const _API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-  ? 'http://localhost:3000'
-  : 'https://hackathon-hai8.onrender.com';
+  ? 'https://the-mother-suite.netlify.app'
+  : 'https://hackathon-bb41.onrender.com';
 
 window.FIREBASE_CONFIG_READY = fetch(`${_API_BASE}/api/config`)
   .then((res) => {
